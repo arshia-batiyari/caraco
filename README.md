@@ -9,7 +9,7 @@ Two independently deployable Laravel 12 applications for the KARAKO holding comp
 
 Domains are environment values. Nothing in the repository hardcodes a production host.
 
-The architecture, shared-hosting limits, and the decisions for Phase 1 are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+The architecture, shared-hosting limits, and the decisions for Phase 1 are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The design system is in [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Requirements
 
@@ -34,6 +34,16 @@ Repeat the same steps in `tourism/`. Use a different `APP_URL`, `DB_DATABASE`, a
 
 `QUEUE_CONNECTION=sync`, `CACHE_STORE=file`, and `SESSION_DRIVER=file` are intentional. Shared hosting is not assumed to provide Redis, Supervisor, or a queue worker.
 
+## Sample pages
+
+Both apps redirect `/` to `/fa`. The other locales are `/en`, `/ru`, and `/ar`.
+
+Holding samples: home, divisions, contact, foundations, and image credits.
+
+Tourism samples: home, a sample journey, an inquiry form, foundations, and image credits.
+
+These pages demonstrate the interface. They are not the published catalog, and the forms do not store messages yet.
+
 ## What is not in this phase
 
-Company pages, division content, the tourism catalog, admin panels, and visual design start in later phases. The stock Laravel welcome page is still the public homepage.
+Division content management, the tourism catalog, admin panels, and accounts are later phases.

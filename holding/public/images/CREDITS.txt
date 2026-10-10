@@ -1,0 +1,20 @@
+Placeholder photographs for the KARAKO design system.
+These are not KARAKO properties.
+
+pavilion.jpg — Dowlatabad Garden pavilion, Yazd. Bernard Gagnon. CC BY-SA 4.0.
+https://commons.wikimedia.org/wiki/File:Dolat_Abad_Garden_-_Pavilion_01.jpg
+
+columns.jpg — Columns at Persepolis. Carole Raddato. CC BY-SA 2.0.
+https://commons.wikimedia.org/wiki/File:Columns_in_Persepolis,_Iran.jpg
+
+alborz.jpg — Crossing the Alborz mountains. Ninara. CC BY 2.0.
+https://commons.wikimedia.org/wiki/File:Crossing_the_Alborz_Mountains_on_a_private_train_(42232808794).jpg
+
+desert.jpg — Lut Desert. Diego Delso. CC BY-SA 4.0.
+https://commons.wikimedia.org/wiki/File:Desierto_de_Lut,_Ir%C3%A1n,_2016-09-22,_DD_44-49_HDR_PAN.jpg
+
+forest.jpg — Hyrcanian forest. Gholamreza Rezaei Aghozgole. CC BY 4.0.
+https://commons.wikimedia.org/wiki/File:Caspian_Hyrcanian_Mixed_Forests_in_Northern_Iran_02.jpg
+
+bridge.jpg — Khaju Bridge, Isfahan. kian Elyassi Bakhtiari. CC BY 2.0.
+https://commons.wikimedia.org/wiki/File:View_from_Khaju_Bridge.jpg

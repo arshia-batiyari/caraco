@@ -103,9 +103,9 @@ Pages are Blade. Vite compiles `resources/css/app.css` and `resources/js/app.js`
 
 Production servers never run `npm` or Vite. Build locally or in CI, then upload `public/build` with the release. `public/build` stays gitignored.
 
-Fonts will be files under `public/fonts`, licensed for web use. Do not load Google Fonts or other third-party stylesheets at runtime.
+Fonts are OFL families bundled by Vite from `@fontsource` (build time only): Vazirmatn for Persian and Arabic, Literata for Latin and Cyrillic headings, Source Sans 3 for Latin and Cyrillic text. Do not load Google Fonts or other third-party stylesheets at runtime.
 
-Visual direction for later phases: charcoal and near-black surfaces, gold as an accent, ivory text areas, neutral gray. The supplied logo is placed, not recreated. Gold text on ivory must meet contrast; gold is not a body-text color.
+Visual direction: charcoal and near-black surfaces, gold as an accent, ivory text areas, neutral gray. Tokens, components, and sample pages are documented in [DESIGN.md](DESIGN.md). The official logo file was not in the repository; the header uses a typographic wordmark until that file is added. Do not invent a geometric symbol. Gold is not a body-text color on ivory; small gold text uses `#7a5c32`.
 
 ## Images and video
 

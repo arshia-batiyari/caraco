@@ -17,6 +17,8 @@ return [
 
     'public_url' => env('APP_URL', 'http://localhost'),
 
+    'related_url' => env('HOLDING_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Locales
