@@ -1,6 +1,6 @@
 # KARAKO technical architecture
 
-Phase 1 records the audit and the foundation. The holding site publishes its public pages from the database. The tourism application now has its own catalog, consultation inquiries, and admin panel.
+Phase 1 records the audit and the foundation. The holding site publishes its public pages from the database. The tourism application now has its own catalog, consultation inquiries, customer feedback, surveys, and admin panel.
 
 ## Audit
 
@@ -85,8 +85,13 @@ Tourism tables now migrated in `karako_tourism`:
 - `faqs` and `faq_translations` (global, or attached to one tour)
 - `pages` and `page_translations`
 - `inquiries`
+- `feedback_submissions`, `feedback_reviews`, and `feedback_follow_ups`
+- `surveys`, `survey_translations`, `survey_questions`, `survey_question_translations`
+- `survey_options`, `survey_option_translations`, `survey_responses`, and `survey_answers`
 
 Accommodation uses a free-text category. The catalog does not store star ratings. Medical tourism is optional homepage text, not a separate service catalog. There is no attractions table and no booking or payment table.
+
+Customer feedback is stored separately from the catalog. A complaint never receives a public review row. Other submissions stay pending until an editor approves a review. Anonymous submissions discard the typed name. Contact details, internal notes, and recorded replies stay on the admin record. Surveys are reusable and localized. An anonymous survey does not store a name, email, or IP with the answers. A survey that already has answers keeps its questions and anonymity setting. Participation pages and filtered feedback URLs are `noindex`. The unfiltered feedback page is in the sitemap. No aggregate rating is added to JSON-LD.
 
 Translations are rows, not JSON blobs: `locale`, `slug`, fields, and SEO columns (`meta_title`, `meta_description`). A unique index on `(parent_id, locale)` and a unique index on `(locale, slug)` keep localized URLs stable. Empty optional relations are not rendered.
 

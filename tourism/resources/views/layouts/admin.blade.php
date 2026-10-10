@@ -30,6 +30,8 @@
                 <a href="{{ route('admin.faqs.index') }}">{{ __('admin.faqs') }}</a>
                 <a href="{{ route('admin.pages.index') }}">{{ __('admin.pages') }}</a>
                 <a href="{{ route('admin.inquiries.index') }}">{{ __('admin.inquiries') }}</a>
+                <a href="{{ route('admin.feedback.index') }}">{{ __('admin.feedback') }}</a>
+                <a href="{{ route('admin.surveys.index') }}">{{ __('admin.surveys') }}</a>
                 @if (auth()->user()?->isAdmin())
                     <a href="{{ route('admin.users.index') }}">{{ __('admin.users') }}</a>
                 @endif

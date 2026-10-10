@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\FeedbackReview;
 use App\Models\Hotel;
 use App\Models\Inquiry;
 use App\Models\Tour;
@@ -18,6 +19,7 @@ class DashboardController extends Controller
             'hotels' => Hotel::query()->count(),
             'inquiries' => Inquiry::query()->count(),
             'openInquiries' => Inquiry::query()->where('status', '!=', 'closed')->count(),
+            'pendingReviews' => FeedbackReview::query()->where('status', 'pending')->count(),
             'recent' => Inquiry::query()->latest()->limit(6)->get(),
         ]);
     }

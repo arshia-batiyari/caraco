@@ -8,6 +8,7 @@
         <li>{{ __('admin.tours') }}: {{ $publishedTours }}/{{ $tours }}</li>
         <li>{{ __('admin.hotels') }}: {{ $hotels }}</li>
         <li>{{ __('admin.inquiries') }}: {{ $openInquiries }}/{{ $inquiries }}</li>
+        <li>{{ __('admin.pending_feedback') }}: {{ $pendingReviews }}</li>
     </ul>
     @if ($recent->isNotEmpty())
         <h2>{{ __('admin.recent_inquiries') }}</h2>

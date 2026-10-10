@@ -16,6 +16,7 @@ class SeoController extends Controller
         foreach (array_keys(config('karako.locales')) as $locale) {
             $urls[] = route('home', ['locale' => $locale]);
             $urls[] = route('consultation', ['locale' => $locale]);
+            $urls[] = route('feedback.index', ['locale' => $locale]);
         }
 
         if (Tour::query()->published()->exists()) {

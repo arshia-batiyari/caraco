@@ -5,11 +5,13 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController as AdminDestinationController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\HomepageController;
 use App\Http\Controllers\Admin\HotelController as AdminHotelController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\SurveyController as AdminSurveyController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\TransportOptionController;
 use App\Http\Controllers\Admin\TravelStyleController;
@@ -17,7 +19,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\MapTileController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SeoController;
@@ -44,6 +48,10 @@ Route::prefix('{locale}')
         Route::get('/categories/{slug}', [CategoryController::class, 'show'])->name('categories.show');
         Route::get('/consultation', [ConsultationController::class, 'show'])->name('consultation');
         Route::post('/consultation', [ConsultationController::class, 'store'])->middleware('throttle:5,1')->name('consultation.store');
+        Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+        Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:5,1')->name('feedback.store');
+        Route::get('/feedback/surveys/{survey}', [SurveyController::class, 'show'])->whereNumber('survey')->name('feedback.surveys.show');
+        Route::post('/feedback/surveys/{survey}', [SurveyController::class, 'store'])->whereNumber('survey')->middleware('throttle:5,1')->name('feedback.surveys.store');
         Route::get('/info/{slug}', [PageController::class, 'show'])->name('pages.show');
         Route::get('/foundations', [TourismPageController::class, 'foundations'])->name('foundations');
         Route::get('/credits', [TourismPageController::class, 'credits'])->name('credits');
@@ -128,6 +136,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/inquiries/{inquiry}', [InquiryController::class, 'show'])->name('inquiries.show');
         Route::put('/inquiries/{inquiry}', [InquiryController::class, 'update'])->name('inquiries.update');
         Route::delete('/inquiries/{inquiry}', [InquiryController::class, 'destroy'])->name('inquiries.destroy');
+
+        Route::get('/feedback', [AdminFeedbackController::class, 'index'])->name('feedback.index');
+        Route::get('/feedback/{submission}', [AdminFeedbackController::class, 'show'])->name('feedback.show');
+        Route::put('/feedback/{submission}', [AdminFeedbackController::class, 'update'])->name('feedback.update');
+        Route::delete('/feedback/{submission}', [AdminFeedbackController::class, 'destroy'])->name('feedback.destroy');
+
+        Route::get('/surveys', [AdminSurveyController::class, 'index'])->name('surveys.index');
+        Route::get('/surveys/create', [AdminSurveyController::class, 'create'])->name('surveys.create');
+        Route::post('/surveys', [AdminSurveyController::class, 'store'])->name('surveys.store');
+        Route::get('/surveys/{survey}/results', [AdminSurveyController::class, 'results'])->name('surveys.results');
+        Route::get('/surveys/{survey}/export', [AdminSurveyController::class, 'export'])->name('surveys.export');
+        Route::get('/surveys/{survey}', [AdminSurveyController::class, 'edit'])->name('surveys.edit');
+        Route::put('/surveys/{survey}', [AdminSurveyController::class, 'update'])->name('surveys.update');
+        Route::delete('/surveys/{survey}', [AdminSurveyController::class, 'destroy'])->name('surveys.destroy');
 
         Route::middleware('role:admin')->group(function () {
             Route::get('/users', [UserController::class, 'index'])->name('users.index');
