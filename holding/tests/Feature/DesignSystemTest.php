@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Inquiry;
 use Tests\TestCase;
 
 class DesignSystemTest extends TestCase
@@ -12,10 +13,13 @@ class DesignSystemTest extends TestCase
             ->assertOk()
             ->assertSee('dir="rtl"', false)
             ->assertSee('lang="fa"', false)
-            ->assertSee('نُه زمینهٔ کار، با یک معیار.')
             ->assertSee('KARAKO')
+            ->assertSee('تماس با ما')
+            ->assertDontSee('نُه زمینهٔ کار، با یک معیار.')
             ->assertDontSee('fonts.bunny.net')
-            ->assertDontSee('fonts.googleapis.com');
+            ->assertDontSee('fonts.googleapis.com')
+            ->assertDontSee('<video', false)
+            ->assertDontSee('<iframe', false);
     }
 
     public function test_english_and_russian_are_left_to_right(): void
@@ -23,17 +27,19 @@ class DesignSystemTest extends TestCase
         $this->get('/en')
             ->assertOk()
             ->assertSee('dir="ltr"', false)
-            ->assertSee('Nine fields of work, held to one standard.');
+            ->assertSee('KARAKO')
+            ->assertDontSee('Nine fields of work, held to one standard.')
+            ->assertDontSee('Sample interface');
 
         $this->get('/ru')
             ->assertOk()
             ->assertSee('dir="ltr"', false)
-            ->assertSee('Девять направлений работы и один общий стандарт.');
+            ->assertSee('Связаться');
 
         $this->get('/ar')
             ->assertOk()
             ->assertSee('dir="rtl"', false)
-            ->assertSee('تسعة مجالات عمل، بمعيار واحد.');
+            ->assertSee('تواصل معنا');
     }
 
     public function test_contact_form_reports_validation_errors_and_accepts_a_message(): void
@@ -47,10 +53,17 @@ class DesignSystemTest extends TestCase
             ->post('/en/contact', [
                 'name' => 'Ada',
                 'email' => 'ada@example.com',
-                'message' => 'A sample note for the holding.',
+                'message' => 'A note for the holding.',
             ])
             ->assertOk()
-            ->assertSee('Nothing was stored or sent.');
+            ->assertSee('Your message has been stored.')
+            ->assertDontSee('Nothing was stored or sent.');
+
+        $this->assertDatabaseHas('inquiries', [
+            'email' => 'ada@example.com',
+            'locale' => 'en',
+        ]);
+        $this->assertSame(1, Inquiry::query()->count());
     }
 
     public function test_foundations_page_paginates_and_missing_pages_use_the_locale(): void

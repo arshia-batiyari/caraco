@@ -21,7 +21,9 @@ return [
     ],
     'nav' => [
         'home' => 'Home',
+        'about' => 'About',
         'divisions' => 'Divisions',
+        'projects' => 'Projects',
         'contact' => 'Contact',
         'journey' => 'Journey',
         'inquiry' => 'Inquiry',
@@ -38,6 +40,29 @@ return [
         'navigate' => 'Navigate',
         'samples' => 'Samples',
         'sample_note' => 'Sample interface. Company facts are not published yet.',
+        'contact' => 'Contact',
+        'follow' => 'Follow',
+    ],
+    'contact_page' => [
+        'headline' => 'Contact',
+        'lede' => 'Send a message to the holding. The message is stored.',
+        'submit' => 'Send message',
+        'sent' => 'Your message has been stored.',
+        'cta_title' => 'Contact',
+        'cta_label' => 'Contact us',
+    ],
+    'video' => [
+        'title' => 'Introduction video',
+        'play' => 'Play the introduction video',
+    ],
+    'external' => 'Website',
+    'social' => [
+        'instagram' => 'Instagram',
+        'linkedin' => 'LinkedIn',
+        'telegram' => 'Telegram',
+        'youtube' => 'YouTube',
+        'x' => 'X',
+        'website' => 'Website',
     ],
     'fields' => [
         'name' => 'Name',
@@ -52,7 +77,7 @@ return [
     ],
     'missing' => [
         'title' => 'This page is not available.',
-        'text' => 'The address does not match a page in this sample.',
+        'text' => 'The address does not match a published page.',
     ],
     'foundations' => [
         'title' => 'Foundations',

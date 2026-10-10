@@ -38,12 +38,10 @@ Repeat the same steps in `tourism/`. Use a different `APP_URL`, `DB_DATABASE`, a
 
 Both apps redirect `/` to `/fa`. The other locales are `/en`, `/ru`, and `/ar`.
 
-Holding samples: home, divisions, contact, foundations, and image credits.
+The holding site publishes the homepage, divisions, about, contact, projects, and custom pages from the database. Unpublished or empty sections are omitted. Create an administrator with `php artisan karako:admin you@example.com` inside `holding/`, then sign in at `/admin`.
 
-Tourism samples: home, a sample journey, an inquiry form, foundations, and image credits.
-
-These pages demonstrate the interface. They are not the published catalog, and the forms do not store messages yet.
+Tourism samples: home, a sample journey, an inquiry form, foundations, and image credits. Those pages demonstrate the interface. The tourism catalog is not built yet, and the tourism inquiry form does not store messages yet.
 
 ## What is not in this phase
 
-Division content management, the tourism catalog, admin panels, and accounts are later phases.
+The tourism catalog, tourism accounts, and tourism admin panel are later phases.

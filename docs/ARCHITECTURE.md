@@ -1,6 +1,6 @@
 # KARAKO technical architecture
 
-Phase 1 records the audit and the foundation. It does not implement the public websites or the admin panels.
+Phase 1 records the audit and the foundation. The holding site now has its public pages, content tables, and admin panel. The tourism catalog is still a later phase.
 
 ## Audit
 
@@ -58,13 +58,17 @@ No foreign keys, views, or queries cross those databases. A record that must app
 
 Framework tables already shipped with Laravel 12 (`users`, `sessions`, `cache`, `jobs`) stay. Production configuration does not use the database for cache, sessions, or queues, so those extra tables are unused unless an operator opts in.
 
-Planned holding tables, to be migrated in a later phase:
+Holding tables now migrated:
 
-- `company_profiles` and `company_profile_translations`
-- `divisions` and `division_translations` (nine divisions, fixed display order)
-- `pages` and `page_translations` for informational division pages
-- `media` for images and an optional introduction video
-- `contact_details` and `social_links`
+- `settings` for the company name, contact email and phone, hero and sharing images, and the optional introduction video
+- `profile_translations` for the localized company summary
+- `homepage_translations` for hero, introduction, approach, and homepage SEO
+- `divisions` and `division_translations` (nine divisions, ordered)
+- `pages` and `page_translations` for about and other informational pages
+- `projects` and `project_translations`
+- `navigation_items` and `navigation_item_translations`
+- `social_links`
+- `contact_translations`
 - `inquiries`
 
 Planned tourism tables, also later:
