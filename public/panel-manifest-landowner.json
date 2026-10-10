@@ -1,0 +1,48 @@
+{
+  "name": "پنل ملک من — هاچ لند",
+  "short_name": "ملک من",
+  "description": "دسترسی سریع به پنل ملک و زمین هاچ لند.",
+  "id": "/landowner",
+  "start_url": "/landowner/dashboard",
+  "scope": "/landowner",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#100D09",
+  "theme_color": "#100D09",
+  "dir": "rtl",
+  "lang": "fa",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-panel-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-panel-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-panel-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-panel-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

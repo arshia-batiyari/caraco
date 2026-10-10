@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /vendor/dashboard
+Disallow: /vendor/products
+Disallow: /vendor/orders
+Disallow: /vendor/settlements
+Disallow: /vendor/pending
+Disallow: /account/*
+Disallow: /checkout
+Disallow: /login
+Disallow: /verify-phone
+
+Sitemap: https://hachland.com/sitemap.xml

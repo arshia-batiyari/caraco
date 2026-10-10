@@ -1,0 +1,22 @@
+{
+  "name": "هاچ لند — بازار آنلاین",
+  "short_name": "هاچ لند",
+  "description": "بازار آنلاین تخصصی خرید و فروش مستقیم از تولیدکننده — مصالح ساختمانی، صنایع‌دستی، کشاورزی و املاک.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#FAF7F0",
+  "theme_color": "#100D09",
+  "dir": "rtl",
+  "lang": "fa",
+  "categories": ["shopping", "business"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,8 @@
+/* Cart modal + category admin improvements */
+.cart-success-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}
+.cart-success-modal.active{display:flex}
+.cart-success-box{background:#fff;border-radius:20px;max-width:420px;width:100%;padding:24px;text-align:center}
+.cart-success-actions{display:flex;gap:10px;margin-top:20px}
+.cart-success-actions a,.cart-success-actions button{flex:1}
+@media(max-width:600px){.cart-success-box{border-radius:16px;padding:18px}.cart-success-actions{flex-direction:column}}
+.category-preview{width:100%;max-width:260px;border-radius:14px;margin-top:10px;display:none}
