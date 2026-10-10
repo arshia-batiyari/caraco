@@ -40,8 +40,8 @@ Both apps redirect `/` to `/fa`. The other locales are `/en`, `/ru`, and `/ar`.
 
 The holding site publishes the homepage, divisions, about, contact, projects, and custom pages from the database. Unpublished or empty sections are omitted. Create an administrator with `php artisan karako:admin you@example.com` inside `holding/`, then sign in at `/admin`.
 
-Tourism samples: home, a sample journey, an inquiry form, foundations, and image credits. Those pages demonstrate the interface. The tourism catalog is not built yet, and the tourism inquiry form does not store messages yet.
+The tourism site publishes tours, destinations, categories, accommodation, and consultation requests from its own database. Empty homepage sections stay hidden. Create an administrator with `php artisan karako:admin you@example.com` inside `tourism/`, then sign in at `/admin`. Public foundations and credits pages remain available by direct URL and are kept out of the index.
 
-## What is not in this phase
+## Current limits
 
-The tourism catalog, tourism accounts, and tourism admin panel are later phases.
+Tourism inquiries are consultation requests. The application does not confirm a reservation, take payment, or track seat inventory. Map tiles load only when `MAP_TILE_URL` is set on the server; otherwise the itinerary map is a drawn route plus the written day list. Inquiry mail is not sent. The admin interface is Persian, with English as the fallback for missing admin strings.

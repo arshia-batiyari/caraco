@@ -3,13 +3,18 @@
     'title',
     'lede' => null,
     'image' => null,
+    'imageUrl' => null,
     'imageAlt' => '',
     'badge' => null,
     'variant' => 'editorial',
 ])
 
 <section {{ $attributes->class(['k-hero', 'k-hero-'.$variant]) }}>
-    @if ($image && $variant === 'immersive')
+    @if ($imageUrl && $variant === 'immersive')
+        <figure class="k-photo k-photo-bleed">
+            <img src="{{ $imageUrl }}" alt="{{ $imageAlt }}" fetchpriority="high" decoding="async">
+        </figure>
+    @elseif ($image && $variant === 'immersive')
         <x-photo :name="$image" :alt="$imageAlt" variant="bleed" priority />
     @endif
     <div class="k-hero-copy">
@@ -27,7 +32,11 @@
             <div class="k-actions">{{ $actions }}</div>
         @endif
     </div>
-    @if ($image && $variant !== 'immersive')
+    @if ($imageUrl && $variant !== 'immersive')
+        <figure class="k-photo k-photo-bleed">
+            <img src="{{ $imageUrl }}" alt="{{ $imageAlt }}" fetchpriority="high" decoding="async">
+        </figure>
+    @elseif ($image && $variant !== 'immersive')
         <x-photo :name="$image" :alt="$imageAlt" variant="bleed" priority />
     @endif
 </section>

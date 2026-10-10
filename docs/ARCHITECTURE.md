@@ -1,6 +1,6 @@
 # KARAKO technical architecture
 
-Phase 1 records the audit and the foundation. The holding site now has its public pages, content tables, and admin panel. The tourism catalog is still a later phase.
+Phase 1 records the audit and the foundation. The holding site publishes its public pages from the database. The tourism application now has its own catalog, consultation inquiries, and admin panel.
 
 ## Audit
 
@@ -71,16 +71,22 @@ Holding tables now migrated:
 - `contact_translations`
 - `inquiries`
 
-Planned tourism tables, also later:
+Tourism tables now migrated in `karako_tourism`:
 
-- `tours`, `tour_translations`, `tour_departures`
-- `hotels`, `hotel_translations`
-- `attractions`, `attraction_translations`
-- `itinerary_days`
-- `transports`
-- `medical_services`, `medical_service_translations`
-- `media`
+- `settings` and `homepage_translations` for the public homepage, optional video, and contact details
+- `destinations` and `destination_translations` (country, region, or city)
+- `categories`, `category_translations`, `travel_styles`, and `travel_style_translations`
+- `transport_options` and `transport_option_translations` (airplane, train, bus, ground, combined)
+- `services` and `service_translations` (included or excluded)
+- `hotels`, `hotel_translations`, `hotel_facilities`, `hotel_facility_translations`, and `hotel_images`
+- `tours`, `tour_translations`, `tour_departures`, `tour_images`
+- `tour_transport`, `tour_service`, `tour_hotels`, and `tour_hotel_translations`
+- `itinerary_days`, `itinerary_day_translations`, `route_points`, and `route_point_translations`
+- `faqs` and `faq_translations` (global, or attached to one tour)
+- `pages` and `page_translations`
 - `inquiries`
+
+Accommodation uses a free-text category. The catalog does not store star ratings. Medical tourism is optional homepage text, not a separate service catalog. There is no attractions table and no booking or payment table.
 
 Translations are rows, not JSON blobs: `locale`, `slug`, fields, and SEO columns (`meta_title`, `meta_description`). A unique index on `(parent_id, locale)` and a unique index on `(locale, slug)` keep localized URLs stable. Empty optional relations are not rendered.
 
@@ -88,7 +94,7 @@ Translations are rows, not JSON blobs: `locale`, `slug`, fields, and SEO columns
 
 Default locale is `fa`. Fallback is `en`. Persian and Arabic use `dir="rtl"`. English and Russian use `dir="ltr"`.
 
-Public routes will be prefixed with the locale (`/fa/...`, `/en/...`). Slugs are stored per locale. Interface strings live in `lang/{fa,en,ru,ar}`. Editorial content lives in the translation tables. A missing translation falls back to English, then is omitted if the English row is also empty. Phase 1 only locks this contract in config and tests. It does not add the locale middleware or the tables.
+Public routes are prefixed with the locale (`/fa/...`, `/en/...`). Slugs are stored per locale. Interface strings live in `lang/{fa,en,ru,ar}`. Editorial content lives in the translation tables. A missing translation falls back to English on listings, then is omitted if the English row is also empty. A detail page renders only the translation that belongs to that URL.
 
 ## Authentication and authorization
 
@@ -168,7 +174,7 @@ Server-rendered HTML. Each localized URL has its own slug, title, meta descripti
 
 Division and tourism pages that are unpublished or have no translation are omitted from the sitemap and return 404. JSON-LD is added with real content only. No invented ratings, addresses, or organization facts.
 
-`robots.txt` will allow public locale pages and disallow admin and inquiry-thank-you URLs. A sitemap is generated from published translations.
+`robots.txt` allows public locale pages and disallows `/admin`. The sitemap lists published translations. Filtered tour listings are `noindex`, and their canonical URL is the unfiltered listing.
 
 ## Testing
 

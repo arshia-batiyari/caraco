@@ -29,6 +29,18 @@ return [
     |
     */
 
+    /*
+    | Map tiles are optional. MAP_TILE_URL is a server-side template such as
+    | https://example.test/tiles/{z}/{x}/{y}.png. The browser requests
+    | /map-tiles/{z}/{x}/{y} so a key in that template is not sent to visitors.
+    | When the value is empty, route maps stay on the page as a drawn path.
+    |
+    */
+
+    'map' => [
+        'tiles' => env('MAP_TILE_URL'),
+    ],
+
     'locales' => [
         'fa' => ['name' => 'Persian', 'native' => 'فارسی', 'dir' => 'rtl'],
         'en' => ['name' => 'English', 'native' => 'English', 'dir' => 'ltr'],

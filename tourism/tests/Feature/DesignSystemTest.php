@@ -11,42 +11,23 @@ class DesignSystemTest extends TestCase
         $this->get('/fa')
             ->assertOk()
             ->assertSee('dir="rtl"', false)
-            ->assertSee('سفر، با همان معیار گروه.')
-            ->assertSee('k-header-overlay', false)
-            ->assertDontSee('fonts.bunny.net');
+            ->assertSee('KARAKO')
+            ->assertDontSee('fonts.bunny.net')
+            ->assertDontSee('<video', false)
+            ->assertDontSee('youtube');
     }
 
-    public function test_other_locales_render_their_own_copy(): void
+    public function test_other_locales_render_their_own_direction(): void
     {
-        $this->get('/en')->assertOk()->assertSee('dir="ltr"', false)
-            ->assertSee('Travel, held to the same standard as the group.');
-        $this->get('/ru')->assertOk()->assertSee('Путешествия по тому же стандарту, что и группа.');
-        $this->get('/ar')->assertOk()->assertSee('dir="rtl"', false)
-            ->assertSee('سفر بالمعيار نفسه الذي تعتمده المجموعة.');
+        $this->get('/en')->assertOk()->assertSee('dir="ltr"', false)->assertSee('Find a tour');
+        $this->get('/ru')->assertOk()->assertSee('dir="ltr"', false)->assertSee('Найти тур');
+        $this->get('/ar')->assertOk()->assertSee('dir="rtl"', false)->assertSee('ابحث عن جولة');
     }
 
-    public function test_inquiry_form_validates_and_confirms_without_storing(): void
+    public function test_foundations_credits_and_missing_pages(): void
     {
-        $this->from('/en/inquiry')
-            ->post('/en/inquiry', ['name' => '', 'email' => 'bad', 'message' => ''])
-            ->assertRedirect('/en/inquiry')
-            ->assertSessionHasErrors(['name', 'email', 'message']);
-
-        $this->followingRedirects()
-            ->post('/en/inquiry', [
-                'name' => 'Ada',
-                'email' => 'ada@example.com',
-                'message' => 'A sample inquiry.',
-            ])
-            ->assertOk()
-            ->assertSee('Nothing was stored or sent.');
-    }
-
-    public function test_journey_foundations_and_missing_pages(): void
-    {
-        $this->get('/en/journey')->assertOk()->assertSee('Four days, written as a sample route.');
         $this->get('/fa/foundations?page=2')->assertOk()->assertSee('یادداشت 5');
         $this->get('/ru/not-a-page')->assertNotFound()->assertSee('Эта страница недоступна.');
-        $this->get('/en/credits')->assertOk()->assertSee('Diego Delso');
+        $this->get('/en/credits')->assertOk()->assertSee('Diego Delso')->assertSee('noindex, follow', false);
     }
 }

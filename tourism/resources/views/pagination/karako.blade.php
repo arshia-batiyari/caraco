@@ -13,11 +13,7 @@
 
             @if (is_array($element))
                 @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <span class="k-pager-link is-current" aria-current="page">{{ $page }}</span>
-                    @else
-                        <a class="k-pager-link" href="{{ $url }}">{{ $page }}</a>
-                    @endif
+                    <a class="k-pager-link @if ($page == $paginator->currentPage()) is-current @endif" href="{{ $url }}" @if ($page == $paginator->currentPage()) aria-current="page" @endif>{{ $page }}</a>
                 @endforeach
             @endif
         @endforeach
