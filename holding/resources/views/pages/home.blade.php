@@ -45,7 +45,7 @@
     <x-video-player :video="$video" />
 
     @if (filled($home?->intro_heading) || filled($home?->intro_body) || $introImage)
-        <section class="k-section">
+        <section class="k-section k-intro">
             <div class="k-wrap {{ $introImage && (filled($home?->intro_heading) || filled($home?->intro_body)) ? 'k-split' : '' }}">
                 <div>
                     @if (filled($home?->intro_heading))
@@ -65,7 +65,7 @@
     @endif
 
     @if ($projects->isNotEmpty())
-        <section class="k-section">
+        <section class="k-section k-projects">
             <div class="k-wrap">
                 <x-section-heading :title="filled($home?->projects_heading) ? $home->projects_heading : __('ui.nav.projects')" />
                 <div class="k-portfolio">
@@ -91,7 +91,7 @@
     @endif
 
     @if (filled($home?->approach_heading) || filled($home?->approach_body))
-        <section class="k-section">
+        <section class="k-section k-approach">
             <div class="k-wrap k-narrow">
                 @if (filled($home?->approach_heading))
                     <x-section-heading :title="$home->approach_heading" />

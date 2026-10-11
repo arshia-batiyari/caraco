@@ -4,7 +4,7 @@
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
     <script type="application/ld+json">{!! json_encode($breadcrumbs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
     <x-breadcrumbs :items="$crumbs" />
-    <article class="k-section">
+    <article class="k-section k-tour">
         <div class="k-wrap">
             <header class="k-section-head">
                 <p class="k-eyebrow">{{ $tour->scope === 'domestic' ? __('ui.tours.domestic') : __('ui.tours.international') }}</p>
@@ -18,7 +18,7 @@
                     $discounted = \App\Support\TourPrice::active($tour);
                 @endphp
                 @if ($price)
-                    <p class="k-price">
+                    <p class="k-price k-tour-price">
                         @if ($discounted)
                             <x-badge>
                                 @if (\App\Support\TourPrice::showsPercent($tour))
@@ -123,7 +123,7 @@
                 <h2>{{ __('ui.tours.accommodation') }}</h2>
                 @foreach ($tour->stays as $stay)
                     @if ($stay->hotel?->publicTranslation())
-                        <section>
+                        <section class="k-stay">
                             <h3>{{ $stay->hotel->publicTranslation()->name }}</h3>
                             @if (filled($stay->hotel->accommodation_category))
                                 <p>{{ $stay->hotel->accommodation_category }}</p>
@@ -167,25 +167,33 @@
                 $included = $tour->services->where('type', 'included');
                 $excluded = $tour->services->where('type', 'excluded');
             @endphp
-            @if ($included->isNotEmpty())
-                <h2>{{ __('ui.tours.included') }}</h2>
-                <ul>
-                    @foreach ($included as $service)
-                        @if ($service->publicTranslation())
-                            <li>{{ $service->publicTranslation()->name }}</li>
-                        @endif
-                    @endforeach
-                </ul>
-            @endif
-            @if ($excluded->isNotEmpty())
-                <h2>{{ __('ui.tours.excluded') }}</h2>
-                <ul>
-                    @foreach ($excluded as $service)
-                        @if ($service->publicTranslation())
-                            <li>{{ $service->publicTranslation()->name }}</li>
-                        @endif
-                    @endforeach
-                </ul>
+            @if ($included->isNotEmpty() || $excluded->isNotEmpty())
+                <div class="k-inclusions">
+                    @if ($included->isNotEmpty())
+                        <section>
+                            <h2>{{ __('ui.tours.included') }}</h2>
+                            <ul>
+                                @foreach ($included as $service)
+                                    @if ($service->publicTranslation())
+                                        <li>{{ $service->publicTranslation()->name }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endif
+                    @if ($excluded->isNotEmpty())
+                        <section>
+                            <h2>{{ __('ui.tours.excluded') }}</h2>
+                            <ul>
+                                @foreach ($excluded as $service)
+                                    @if ($service->publicTranslation())
+                                        <li>{{ $service->publicTranslation()->name }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </section>
+                    @endif
+                </div>
             @endif
 
             @if ($tour->days->isNotEmpty())
