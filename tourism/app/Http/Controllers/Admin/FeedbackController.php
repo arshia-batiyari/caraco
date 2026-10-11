@@ -24,6 +24,19 @@ class FeedbackController extends Controller
         if (in_array($request->query('status'), ['pending', 'approved', 'rejected', 'hidden'], true)) {
             $query->whereHas('review', fn ($inner) => $inner->where('status', $request->query('status')));
         }
+        $term = trim((string) $request->query('q', ''));
+        if (mb_strlen($term) > 80) {
+            $term = mb_substr($term, 0, 80);
+        }
+        if ($term !== '') {
+            $like = '%'.addcslashes($term, '%_\\').'%';
+            $query->where(function ($inner) use ($like) {
+                $inner->where('name', 'like', $like)
+                    ->orWhere('email', 'like', $like)
+                    ->orWhere('title', 'like', $like)
+                    ->orWhere('message', 'like', $like);
+            });
+        }
         if (in_array($request->query('complaint'), ['new', 'reviewing', 'awaiting', 'resolved', 'closed'], true)) {
             $status = $request->query('complaint');
             $latest = DB::table('feedback_follow_ups')
@@ -39,7 +52,7 @@ class FeedbackController extends Controller
 
         return view('admin.feedback.index', [
             'records' => $query->paginate(20)->withQueryString(),
-            'filters' => $request->only(['type', 'status', 'complaint']),
+            'filters' => $request->only(['q', 'type', 'status', 'complaint']),
         ]);
     }
 
@@ -86,6 +99,7 @@ class FeedbackController extends Controller
     public function destroy(FeedbackSubmission $submission): RedirectResponse
     {
         $this->authorize('delete', $submission);
+        $this->requireDeleteConfirmation();
         $submission->delete();
 
         return redirect()->route('admin.feedback.index')->with('status', __('admin.saved'));

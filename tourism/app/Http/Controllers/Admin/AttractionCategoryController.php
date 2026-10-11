@@ -16,7 +16,7 @@ class AttractionCategoryController extends Controller
         $this->authorize('viewAny', AttractionCategory::class);
 
         return view('admin.attractions.categories.index', [
-            'records' => AttractionCategory::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(AttractionCategory::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -63,6 +63,7 @@ class AttractionCategoryController extends Controller
     public function destroy(AttractionCategory $category): RedirectResponse
     {
         $this->authorize('delete', $category);
+        $this->requireDeleteConfirmation();
         $category->delete();
 
         return redirect()->route('admin.attraction-categories.index')->with('status', __('admin.saved'));

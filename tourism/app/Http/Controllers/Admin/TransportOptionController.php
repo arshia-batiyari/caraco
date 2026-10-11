@@ -17,7 +17,7 @@ class TransportOptionController extends Controller
         $this->authorize('viewAny', TransportOption::class);
 
         return view('admin.transports.index', [
-            'records' => TransportOption::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(TransportOption::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -66,6 +66,7 @@ class TransportOptionController extends Controller
     public function destroy(TransportOption $transport): RedirectResponse
     {
         $this->authorize('delete', $transport);
+        $this->requireDeleteConfirmation();
         $transport->delete();
         CatalogCache::flush();
 

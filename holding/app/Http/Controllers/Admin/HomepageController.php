@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Support\LocaleText;
 use App\Support\MediaUploads;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use RuntimeException;
 
@@ -58,34 +59,36 @@ class HomepageController extends Controller
             return back()->withInput()->withErrors(['hero_image' => __('admin.validation.image')]);
         }
 
-        Setting::putValue('hero_image', $hero);
-        Setting::putValue('intro_image', $intro);
-        Setting::putValue('poster_path', $poster);
-        Setting::putValue('video_path', $video);
-        Setting::putValue('video_type', (string) $request->input('video_type'));
-        Setting::putValue('video_url', LocaleText::blank($request->input('video_url')));
+        DB::transaction(function () use ($request, $hero, $intro, $poster, $video) {
+            Setting::putValue('hero_image', $hero);
+            Setting::putValue('intro_image', $intro);
+            Setting::putValue('poster_path', $poster);
+            Setting::putValue('video_path', $video);
+            Setting::putValue('video_type', (string) $request->input('video_type'));
+            Setting::putValue('video_url', LocaleText::blank($request->input('video_url')));
 
-        $input = $request->input('translations', []);
-        foreach (array_keys(config('karako.locales')) as $locale) {
-            $row = is_array($input[$locale] ?? null) ? $input[$locale] : [];
-            $payload = [];
-            $blank = true;
-            foreach ($this->fields as $field) {
-                $payload[$field] = LocaleText::blank(isset($row[$field]) ? (string) $row[$field] : null);
-                if ($payload[$field] !== null) {
-                    $blank = false;
+            $input = $request->input('translations', []);
+            foreach (array_keys(config('karako.locales')) as $locale) {
+                $row = is_array($input[$locale] ?? null) ? $input[$locale] : [];
+                $payload = [];
+                $blank = true;
+                foreach ($this->fields as $field) {
+                    $payload[$field] = LocaleText::blank(isset($row[$field]) ? (string) $row[$field] : null);
+                    if ($payload[$field] !== null) {
+                        $blank = false;
+                    }
                 }
+
+                $existing = HomepageTranslation::query()->where('locale', $locale)->first();
+                if ($blank) {
+                    $existing?->delete();
+
+                    continue;
+                }
+
+                HomepageTranslation::query()->updateOrCreate(['locale' => $locale], $payload);
             }
-
-            $existing = HomepageTranslation::query()->where('locale', $locale)->first();
-            if ($blank) {
-                $existing?->delete();
-
-                continue;
-            }
-
-            HomepageTranslation::query()->updateOrCreate(['locale' => $locale], $payload);
-        }
+        });
 
         return redirect()->route('admin.homepage.edit')->with('status', __('admin.saved'));
     }

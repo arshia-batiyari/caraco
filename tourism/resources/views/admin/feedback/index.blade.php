@@ -3,6 +3,10 @@
 @section('content')
     <h1>{{ __('admin.feedback') }}</h1>
     <form class="k-admin-filters" method="get">
+        <div class="k-field">
+            <label for="admin-q">{{ __('admin.search') }}</label>
+            <input id="admin-q" name="q" type="search" value="{{ $filters['q'] ?? '' }}" maxlength="80">
+        </div>
         <select name="type">
             <option value="">{{ __('ui.fields.none') }}</option>
             @foreach (['general', 'complaint', 'suggestion', 'compliment'] as $type)

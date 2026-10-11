@@ -10,6 +10,7 @@ use App\Support\ImageStore;
 use App\Support\LocaleText;
 use App\Support\MediaUploads;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use RuntimeException;
 
@@ -20,7 +21,7 @@ class DestinationController extends Controller
         $this->authorize('viewAny', Destination::class);
 
         return view('admin.destinations.index', [
-            'records' => Destination::query()->with('translations', 'parent.translations')->orderBy('position')->orderBy('id')->get(),
+            'records' => \App\Support\AdminList::paginate(Destination::query()->with('translations', 'parent.translations'), request(), 'name'),
         ]);
     }
 
@@ -44,15 +45,19 @@ class DestinationController extends Controller
             return back()->withInput()->withErrors(['image' => __('admin.validation.image')]);
         }
 
-        $record = Destination::query()->create([
-            'parent_id' => $request->input('parent_id') ?: null,
-            'type' => $request->input('type'),
-            'is_published' => $request->boolean('is_published'),
-            'is_featured' => $request->boolean('is_featured'),
-            'position' => $request->integer('position'),
-            'image_path' => $image,
-        ]);
-        $this->sync($request, $record);
+        $record = DB::transaction(function () use ($request, $image) {
+            $record = Destination::query()->create([
+                'parent_id' => $request->input('parent_id') ?: null,
+                'type' => $request->input('type'),
+                'is_published' => $request->boolean('is_published'),
+                'is_featured' => $request->boolean('is_featured'),
+                'position' => $request->integer('position'),
+                'image_path' => $image,
+            ]);
+            $this->sync($request, $record);
+
+            return $record;
+        });
         CatalogCache::flush();
 
         return redirect()->route('admin.destinations.edit', $record)->with('status', __('admin.saved'));
@@ -81,15 +86,17 @@ class DestinationController extends Controller
             return back()->withInput()->withErrors(['image' => __('admin.validation.image')]);
         }
 
-        $destination->update([
-            'parent_id' => $request->input('parent_id') ?: null,
-            'type' => $request->input('type'),
-            'is_published' => $request->boolean('is_published'),
-            'is_featured' => $request->boolean('is_featured'),
-            'position' => $request->integer('position'),
-            'image_path' => $image,
-        ]);
-        $this->sync($request, $destination);
+        DB::transaction(function () use ($request, $destination, $image) {
+            $destination->update([
+                'parent_id' => $request->input('parent_id') ?: null,
+                'type' => $request->input('type'),
+                'is_published' => $request->boolean('is_published'),
+                'is_featured' => $request->boolean('is_featured'),
+                'position' => $request->integer('position'),
+                'image_path' => $image,
+            ]);
+            $this->sync($request, $destination);
+        });
         CatalogCache::flush();
 
         return redirect()->route('admin.destinations.edit', $destination)->with('status', __('admin.saved'));
@@ -98,6 +105,7 @@ class DestinationController extends Controller
     public function destroy(Destination $destination): RedirectResponse
     {
         $this->authorize('delete', $destination);
+        $this->requireDeleteConfirmation();
         ImageStore::delete($destination->image_path);
         $destination->delete();
         CatalogCache::flush();

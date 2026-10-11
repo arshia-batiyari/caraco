@@ -16,7 +16,7 @@ class MedicalStepController extends Controller
         $this->authorize('viewAny', MedicalStep::class);
 
         return view('admin.medical.steps.index', [
-            'records' => MedicalStep::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(MedicalStep::query()->with('translations'), request(), 'title'),
         ]);
     }
 
@@ -63,6 +63,7 @@ class MedicalStepController extends Controller
     public function destroy(MedicalStep $step): RedirectResponse
     {
         $this->authorize('delete', $step);
+        $this->requireDeleteConfirmation();
         $step->delete();
 
         return redirect()->route('admin.medical.steps.index')->with('status', __('admin.saved'));

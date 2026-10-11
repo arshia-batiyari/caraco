@@ -18,10 +18,12 @@
         </div>
         <div class="k-field"><label for="position">{{ __('admin.position') }}</label><input id="position" name="position" type="number" min="0" value="{{ old('position', $record->position) }}"></div>
         <label class="k-check"><input type="hidden" name="is_published" value="0"><input type="checkbox" name="is_published" value="1" @checked(filter_var(old('is_published', $record->is_published), FILTER_VALIDATE_BOOL))><span>{{ __('admin.published') }}</span></label>
+        <p class="k-field-hint">{{ __('admin.published_hint') }}</p>
         <div class="k-field">
             <label for="image">{{ __('admin.cover') }}</label>
             <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp">
             @if ($record->image_path)
+                <img class="k-admin-preview" src="{{ \App\Support\ImageStore::url($record->image_path) }}" alt="">
                 <label class="k-check"><input type="checkbox" name="remove_image" value="1"><span>{{ __('admin.remove_cover') }}</span></label>
             @endif
         </div>
@@ -41,6 +43,7 @@
         <button class="k-btn k-btn-ink" type="submit">{{ __('admin.save') }}</button>
     </form>
     @if ($record->exists)
-        <form class="k-admin-delete" method="post" action="{{ route('admin.medical.doctors.destroy', $record) }}">@csrf @method('DELETE')<button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button></form>
+        <form class="k-admin-delete" method="post" action="{{ route('admin.medical.doctors.destroy', $record) }}">@csrf @method('DELETE')
+            <label class="k-check"><input type="checkbox" name="confirm_delete" value="1"><span>{{ __('admin.confirm_delete') }}</span></label><button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button></form>
     @endif
 @endsection

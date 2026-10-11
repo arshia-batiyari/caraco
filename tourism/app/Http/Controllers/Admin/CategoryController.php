@@ -17,7 +17,7 @@ class CategoryController extends Controller
         $this->authorize('viewAny', Category::class);
 
         return view('admin.categories.index', [
-            'records' => Category::query()->with('translations')->orderBy('position')->orderBy('id')->get(),
+            'records' => \App\Support\AdminList::paginate(Category::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -72,6 +72,7 @@ class CategoryController extends Controller
     public function destroy(Category $category): RedirectResponse
     {
         $this->authorize('delete', $category);
+        $this->requireDeleteConfirmation();
         $category->delete();
         CatalogCache::flush();
 

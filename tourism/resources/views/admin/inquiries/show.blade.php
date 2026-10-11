@@ -42,6 +42,7 @@
         <button class="k-btn k-btn-ink" type="submit">{{ __('admin.save') }}</button>
     </form>
     @if (auth()->user()?->isAdmin())
-        <form class="k-admin-delete" method="post" action="{{ route('admin.inquiries.destroy', $inquiry) }}">@csrf @method('DELETE')<button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button></form>
+        <form class="k-admin-delete" method="post" action="{{ route('admin.inquiries.destroy', $inquiry) }}">@csrf @method('DELETE')
+            <label class="k-check"><input type="checkbox" name="confirm_delete" value="1"><span>{{ __('admin.confirm_delete') }}</span></label><button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button></form>
     @endif
 @endsection

@@ -1,7 +1,14 @@
 @extends('layouts.admin')
 
+@section('title', __('admin.inquiries'))
+
 @section('content')
     <h1>{{ __('admin.inquiries') }}</h1>
+    @include('admin.partials.filters', [
+        'showPublished' => false,
+        'showStatus' => true,
+        'statuses' => ['new', 'reviewing', 'assigned', 'closed'],
+    ])
     @if ($records->isEmpty())
         <x-empty-state :title="__('admin.empty')" />
     @else

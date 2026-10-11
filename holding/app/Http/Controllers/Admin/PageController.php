@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\PageRequest;
 use App\Models\Page;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -16,7 +17,7 @@ class PageController extends Controller
         $this->authorize('viewAny', Page::class);
 
         return view('admin.pages.index', [
-            'pages' => Page::query()->orderBy('position')->orderBy('id')->with('translations')->get(),
+            'pages' => \App\Support\AdminList::paginate(Page::query()->with('translations'), request(), 'title'),
         ]);
     }
 
@@ -32,11 +33,15 @@ class PageController extends Controller
     public function store(PageRequest $request): RedirectResponse
     {
         $this->authorize('create', Page::class);
-        $page = Page::query()->create([
-            'position' => $request->integer('position'),
-            'is_published' => $request->boolean('is_published'),
-        ]);
-        $this->sync($request, $page);
+        $page = DB::transaction(function () use ($request) {
+            $page = Page::query()->create([
+                'position' => $request->integer('position'),
+                'is_published' => $request->boolean('is_published'),
+            ]);
+            $this->sync($request, $page);
+
+            return $page;
+        });
 
         return redirect()->route('admin.pages.edit', $page)->with('status', __('admin.saved'));
     }
@@ -53,11 +58,13 @@ class PageController extends Controller
     public function update(PageRequest $request, Page $page): RedirectResponse
     {
         $this->authorize('update', $page);
-        $page->update([
-            'position' => $request->integer('position'),
-            'is_published' => $request->boolean('is_published'),
-        ]);
-        $this->sync($request, $page);
+        DB::transaction(function () use ($request, $page) {
+            $page->update([
+                'position' => $request->integer('position'),
+                'is_published' => $request->boolean('is_published'),
+            ]);
+            $this->sync($request, $page);
+        });
 
         return redirect()->route('admin.pages.edit', $page)->with('status', __('admin.saved'));
     }
@@ -65,6 +72,7 @@ class PageController extends Controller
     public function destroy(Page $page): RedirectResponse
     {
         $this->authorize('delete', $page);
+        $this->requireDeleteConfirmation();
         $page->delete();
 
         return redirect()->route('admin.pages.index')->with('status', __('admin.saved'));

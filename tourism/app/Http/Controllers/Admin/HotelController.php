@@ -11,6 +11,7 @@ use App\Support\CatalogCache;
 use App\Support\ImageStore;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use RuntimeException;
@@ -22,7 +23,7 @@ class HotelController extends Controller
         $this->authorize('viewAny', Hotel::class);
 
         return view('admin.hotels.index', [
-            'records' => Hotel::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(Hotel::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -39,8 +40,12 @@ class HotelController extends Controller
     public function store(HotelRequest $request): RedirectResponse
     {
         $this->authorize('create', Hotel::class);
-        $record = Hotel::query()->create($this->payload($request));
-        $this->sync($request, $record);
+        $record = DB::transaction(function () use ($request) {
+            $record = Hotel::query()->create($this->payload($request));
+            $this->sync($request, $record);
+
+            return $record;
+        });
 
         return redirect()->route('admin.hotels.edit', $record)->with('status', __('admin.saved'));
     }
@@ -58,8 +63,10 @@ class HotelController extends Controller
     public function update(HotelRequest $request, Hotel $hotel): RedirectResponse
     {
         $this->authorize('update', $hotel);
-        $hotel->update($this->payload($request));
-        $this->sync($request, $hotel);
+        DB::transaction(function () use ($request, $hotel) {
+            $hotel->update($this->payload($request));
+            $this->sync($request, $hotel);
+        });
 
         return redirect()->route('admin.hotels.edit', $hotel)->with('status', __('admin.saved'));
     }
@@ -67,6 +74,7 @@ class HotelController extends Controller
     public function destroy(Hotel $hotel): RedirectResponse
     {
         $this->authorize('delete', $hotel);
+        $this->requireDeleteConfirmation();
         $hotel->images->each(fn (HotelImage $image) => ImageStore::delete($image->path));
         $hotel->delete();
         CatalogCache::flush();

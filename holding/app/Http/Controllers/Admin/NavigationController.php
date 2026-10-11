@@ -8,6 +8,7 @@ use App\Models\NavigationItem;
 use App\Models\Page;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class NavigationController extends Controller
@@ -22,25 +23,27 @@ class NavigationController extends Controller
 
     public function update(NavigationRequest $request): RedirectResponse
     {
-        $remove = array_map('intval', $request->input('remove', []));
-        if ($remove !== []) {
-            NavigationItem::query()->whereIn('id', $remove)->delete();
-        }
-
-        foreach ($request->input('items', []) as $id => $row) {
-            if (! is_array($row) || in_array((int) $id, $remove, true)) {
-                continue;
+        DB::transaction(function () use ($request) {
+            $remove = array_map('intval', $request->input('remove', []));
+            if ($remove !== []) {
+                NavigationItem::query()->whereIn('id', $remove)->delete();
             }
-            $item = NavigationItem::query()->find($id);
-            if ($item) {
-                $this->fill($item, $row);
-            }
-        }
 
-        $new = $request->input('new', []);
-        if (is_array($new) && filled($new['kind'] ?? null)) {
-            $this->fill(new NavigationItem, $new);
-        }
+            foreach ($request->input('items', []) as $id => $row) {
+                if (! is_array($row) || in_array((int) $id, $remove, true)) {
+                    continue;
+                }
+                $item = NavigationItem::query()->find($id);
+                if ($item) {
+                    $this->fill($item, $row);
+                }
+            }
+
+            $new = $request->input('new', []);
+            if (is_array($new) && filled($new['kind'] ?? null)) {
+                $this->fill(new NavigationItem, $new);
+            }
+        });
 
         return redirect()->route('admin.navigation.edit')->with('status', __('admin.saved'));
     }

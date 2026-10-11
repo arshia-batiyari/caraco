@@ -19,6 +19,7 @@
             <input type="checkbox" name="is_published" value="1" @checked(filter_var(old('is_published', $page->is_published ? '1' : '0'), FILTER_VALIDATE_BOOL))>
             <span>{{ __('admin.published') }}</span>
         </label>
+        <p class="k-field-hint">{{ __('admin.published_hint') }}</p>
         @include('admin.partials.translation-tabs', [
             'rows' => $page->relationLoaded('translations') ? $page->translations->keyBy('locale') : collect(),
             'fields' => [
@@ -36,6 +37,7 @@
         <form method="post" action="{{ route('admin.pages.destroy', $page) }}" class="k-admin-delete">
             @csrf
             @method('DELETE')
+            <label class="k-check"><input type="checkbox" name="confirm_delete" value="1"><span>{{ __('admin.confirm_delete') }}</span></label>
             <button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button>
         </form>
     @endif

@@ -18,7 +18,7 @@ class SurveyController extends Controller
         $this->authorize('viewAny', Survey::class);
 
         return view('admin.surveys.index', [
-            'records' => Survey::query()->with('translations')->withCount('responses')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(Survey::query()->with('translations')->withCount('responses'), request(), 'title'),
         ]);
     }
 
@@ -61,6 +61,7 @@ class SurveyController extends Controller
     public function destroy(Survey $survey): RedirectResponse
     {
         $this->authorize('delete', $survey);
+        $this->requireDeleteConfirmation();
         $survey->delete();
 
         return redirect()->route('admin.surveys.index')->with('status', __('admin.saved'));

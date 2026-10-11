@@ -12,6 +12,7 @@ use App\Support\GallerySync;
 use App\Support\ImageStore;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AttractionController extends Controller
@@ -21,7 +22,7 @@ class AttractionController extends Controller
         $this->authorize('viewAny', Attraction::class);
 
         return view('admin.attractions.index', [
-            'records' => Attraction::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(Attraction::query()->with('translations'), request(), 'title'),
         ]);
     }
 
@@ -40,8 +41,13 @@ class AttractionController extends Controller
     public function store(AttractionRequest $request): RedirectResponse
     {
         $this->authorize('create', Attraction::class);
-        $record = Attraction::query()->create($this->payload($request));
-        $this->sync($request, $record);
+        $payload = $this->payload($request);
+        $record = DB::transaction(function () use ($request, $payload) {
+            $record = Attraction::query()->create($payload);
+            $this->sync($request, $record);
+
+            return $record;
+        });
 
         return redirect()->route('admin.attractions.edit', $record)->with('status', __('admin.saved'));
     }
@@ -56,8 +62,11 @@ class AttractionController extends Controller
     public function update(AttractionRequest $request, Attraction $attraction): RedirectResponse
     {
         $this->authorize('update', $attraction);
-        $attraction->update($this->payload($request, $attraction));
-        $this->sync($request, $attraction);
+        $payload = $this->payload($request, $attraction);
+        DB::transaction(function () use ($request, $attraction, $payload) {
+            $attraction->update($payload);
+            $this->sync($request, $attraction);
+        });
 
         return redirect()->route('admin.attractions.edit', $attraction)->with('status', __('admin.saved'));
     }
@@ -65,6 +74,7 @@ class AttractionController extends Controller
     public function destroy(Attraction $attraction): RedirectResponse
     {
         $this->authorize('delete', $attraction);
+        $this->requireDeleteConfirmation();
         ImageStore::delete($attraction->cover_path);
         $attraction->load('images')->images->each(fn ($image) => ImageStore::delete($image->path));
         $attraction->delete();

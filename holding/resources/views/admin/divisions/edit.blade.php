@@ -17,6 +17,7 @@
             <input type="checkbox" name="is_published" value="1" @checked(filter_var(old('is_published', $division->is_published ? '1' : '0'), FILTER_VALIDATE_BOOL))>
             <span>{{ __('admin.published') }}</span>
         </label>
+        <p class="k-field-hint">{{ __('admin.published_hint') }}</p>
         <div class="k-field {{ $errors->has('destination_url') ? 'is-invalid' : '' }}">
             <label for="destination_url">{{ __('admin.destination') }}</label>
             <input id="destination_url" name="destination_url" value="{{ old('destination_url', $division->destination_url) }}">

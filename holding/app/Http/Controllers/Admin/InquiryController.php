@@ -13,7 +13,7 @@ class InquiryController extends Controller
         $this->authorize('viewAny', Inquiry::class);
 
         return view('admin.inquiries.index', [
-            'inquiries' => Inquiry::query()->latest()->paginate(20),
+            'inquiries' => \App\Support\AdminList::paginate(Inquiry::query(), request()),
         ]);
     }
 

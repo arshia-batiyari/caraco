@@ -16,7 +16,7 @@ class MedicalCategoryController extends Controller
         $this->authorize('viewAny', MedicalCategory::class);
 
         return view('admin.medical.categories.index', [
-            'records' => MedicalCategory::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(MedicalCategory::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -65,6 +65,7 @@ class MedicalCategoryController extends Controller
     public function destroy(MedicalCategory $category): RedirectResponse
     {
         $this->authorize('delete', $category);
+        $this->requireDeleteConfirmation();
         $category->delete();
 
         return redirect()->route('admin.medical.categories.index')->with('status', __('admin.saved'));

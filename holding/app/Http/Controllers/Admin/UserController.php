@@ -15,7 +15,7 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
 
         return view('admin.users.index', [
-            'users' => User::query()->orderBy('name')->get(),
+            'users' => \App\Support\AdminList::paginate(User::query(), request()),
         ]);
     }
 

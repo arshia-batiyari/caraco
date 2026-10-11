@@ -10,6 +10,7 @@ use App\Support\GallerySync;
 use App\Support\ImageStore;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class MedicalDoctorController extends Controller
@@ -19,7 +20,7 @@ class MedicalDoctorController extends Controller
         $this->authorize('viewAny', MedicalDoctor::class);
 
         return view('admin.medical.doctors.index', [
-            'records' => MedicalDoctor::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(MedicalDoctor::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -33,10 +34,15 @@ class MedicalDoctorController extends Controller
     public function store(MedicalDoctorRequest $request): RedirectResponse
     {
         $this->authorize('create', MedicalDoctor::class);
-        $record = MedicalDoctor::query()->create($this->payload($request));
-        LocaleText::sync($record, $request->input('translations', []), [
-            'name', 'slug', 'specialty', 'biography', 'image_alt', 'meta_title', 'meta_description', 'canonical_url',
-        ], 'name');
+        $payload = $this->payload($request);
+        $record = DB::transaction(function () use ($request, $payload) {
+            $record = MedicalDoctor::query()->create($payload);
+            LocaleText::sync($record, $request->input('translations', []), [
+                'name', 'slug', 'specialty', 'biography', 'image_alt', 'meta_title', 'meta_description', 'canonical_url',
+            ], 'name');
+
+            return $record;
+        });
 
         return redirect()->route('admin.medical.doctors.edit', $record)->with('status', __('admin.saved'));
     }
@@ -51,10 +57,13 @@ class MedicalDoctorController extends Controller
     public function update(MedicalDoctorRequest $request, MedicalDoctor $doctor): RedirectResponse
     {
         $this->authorize('update', $doctor);
-        $doctor->update($this->payload($request, $doctor));
-        LocaleText::sync($doctor, $request->input('translations', []), [
-            'name', 'slug', 'specialty', 'biography', 'image_alt', 'meta_title', 'meta_description', 'canonical_url',
-        ], 'name');
+        $payload = $this->payload($request, $doctor);
+        DB::transaction(function () use ($request, $doctor, $payload) {
+            $doctor->update($payload);
+            LocaleText::sync($doctor, $request->input('translations', []), [
+                'name', 'slug', 'specialty', 'biography', 'image_alt', 'meta_title', 'meta_description', 'canonical_url',
+            ], 'name');
+        });
 
         return redirect()->route('admin.medical.doctors.edit', $doctor)->with('status', __('admin.saved'));
     }
@@ -62,6 +71,7 @@ class MedicalDoctorController extends Controller
     public function destroy(MedicalDoctor $doctor): RedirectResponse
     {
         $this->authorize('delete', $doctor);
+        $this->requireDeleteConfirmation();
         ImageStore::delete($doctor->image_path);
         $doctor->delete();
 

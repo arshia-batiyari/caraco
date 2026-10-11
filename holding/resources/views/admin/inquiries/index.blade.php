@@ -4,8 +4,9 @@
 
 @section('content')
     <h1>{{ __('admin.inquiries') }}</h1>
+    @include('admin.partials.filters', ['showPublished' => false])
     @if ($inquiries->isEmpty())
-        <p>{{ __('admin.empty') }}</p>
+        <x-empty-state :title="__('admin.empty')" />
     @else
         <div class="k-table-wrap">
             <table class="k-table">

@@ -16,7 +16,7 @@ class MedicalFaqController extends Controller
         $this->authorize('viewAny', MedicalFaq::class);
 
         return view('admin.medical.faqs.index', [
-            'records' => MedicalFaq::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(MedicalFaq::query()->with('translations'), request(), 'question'),
         ]);
     }
 
@@ -63,6 +63,7 @@ class MedicalFaqController extends Controller
     public function destroy(MedicalFaq $faq): RedirectResponse
     {
         $this->authorize('delete', $faq);
+        $this->requireDeleteConfirmation();
         $faq->delete();
 
         return redirect()->route('admin.medical.faqs.index')->with('status', __('admin.saved'));

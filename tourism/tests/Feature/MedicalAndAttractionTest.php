@@ -178,7 +178,7 @@ class MedicalAndAttractionTest extends TestCase
         $editor = User::factory()->create();
         $this->actingAs($editor)->delete('/admin/medical/inquiries/'.$inquiry->id)->assertForbidden();
         $admin = User::factory()->admin()->create();
-        $this->actingAs($admin)->delete('/admin/medical/inquiries/'.$inquiry->id)->assertRedirect('/admin/medical/inquiries');
+        $this->actingAs($admin)->delete('/admin/medical/inquiries/'.$inquiry->id, ['confirm_delete' => '1'])->assertRedirect('/admin/medical/inquiries');
         $this->assertSame(0, MedicalInquiry::query()->count());
     }
 

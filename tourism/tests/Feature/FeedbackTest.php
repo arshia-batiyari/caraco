@@ -189,7 +189,7 @@ class FeedbackTest extends TestCase
             ->assertDontSee('Hidden name note');
 
         $admin = User::factory()->admin()->create();
-        $this->actingAs($admin)->delete('/admin/feedback/'.$complaint->id)->assertRedirect('/admin/feedback');
+        $this->actingAs($admin)->delete('/admin/feedback/'.$complaint->id, ['confirm_delete' => '1'])->assertRedirect('/admin/feedback');
         $this->assertNull(FeedbackSubmission::query()->find($complaint->id));
     }
 
@@ -372,7 +372,7 @@ class FeedbackTest extends TestCase
 
         $this->actingAs($editor)->delete('/admin/surveys/'.$survey->id)->assertForbidden();
         $admin = User::factory()->admin()->create();
-        $this->actingAs($admin)->delete('/admin/surveys/'.$survey->id)->assertRedirect('/admin/surveys');
+        $this->actingAs($admin)->delete('/admin/surveys/'.$survey->id, ['confirm_delete' => '1'])->assertRedirect('/admin/surveys');
         $this->assertSame(0, Survey::query()->count());
     }
 

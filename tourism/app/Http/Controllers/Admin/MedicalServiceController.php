@@ -11,6 +11,7 @@ use App\Support\GallerySync;
 use App\Support\ImageStore;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class MedicalServiceController extends Controller
@@ -20,7 +21,7 @@ class MedicalServiceController extends Controller
         $this->authorize('viewAny', MedicalService::class);
 
         return view('admin.medical.services.index', [
-            'records' => MedicalService::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(MedicalService::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -34,8 +35,13 @@ class MedicalServiceController extends Controller
     public function store(MedicalServiceRequest $request): RedirectResponse
     {
         $this->authorize('create', MedicalService::class);
-        $record = MedicalService::query()->create($this->payload($request));
-        $this->sync($request, $record);
+        $payload = $this->payload($request);
+        $record = DB::transaction(function () use ($request, $payload) {
+            $record = MedicalService::query()->create($payload);
+            $this->sync($request, $record);
+
+            return $record;
+        });
 
         return redirect()->route('admin.medical.services.edit', $record)->with('status', __('admin.saved'));
     }
@@ -50,8 +56,11 @@ class MedicalServiceController extends Controller
     public function update(MedicalServiceRequest $request, MedicalService $service): RedirectResponse
     {
         $this->authorize('update', $service);
-        $service->update($this->payload($request, $service));
-        $this->sync($request, $service);
+        $payload = $this->payload($request, $service);
+        DB::transaction(function () use ($request, $service, $payload) {
+            $service->update($payload);
+            $this->sync($request, $service);
+        });
 
         return redirect()->route('admin.medical.services.edit', $service)->with('status', __('admin.saved'));
     }
@@ -59,6 +68,7 @@ class MedicalServiceController extends Controller
     public function destroy(MedicalService $service): RedirectResponse
     {
         $this->authorize('delete', $service);
+        $this->requireDeleteConfirmation();
         ImageStore::delete($service->cover_path);
         $service->images->each(function ($image) {
             ImageStore::delete($image->path);

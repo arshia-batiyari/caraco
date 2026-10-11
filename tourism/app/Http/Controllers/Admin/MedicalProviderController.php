@@ -11,6 +11,7 @@ use App\Support\GallerySync;
 use App\Support\ImageStore;
 use App\Support\LocaleText;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class MedicalProviderController extends Controller
@@ -20,7 +21,7 @@ class MedicalProviderController extends Controller
         $this->authorize('viewAny', MedicalProvider::class);
 
         return view('admin.medical.providers.index', [
-            'records' => MedicalProvider::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(MedicalProvider::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -34,8 +35,13 @@ class MedicalProviderController extends Controller
     public function store(MedicalProviderRequest $request): RedirectResponse
     {
         $this->authorize('create', MedicalProvider::class);
-        $record = MedicalProvider::query()->create($this->payload($request));
-        $this->sync($request, $record);
+        $payload = $this->payload($request);
+        $record = DB::transaction(function () use ($request, $payload) {
+            $record = MedicalProvider::query()->create($payload);
+            $this->sync($request, $record);
+
+            return $record;
+        });
 
         return redirect()->route('admin.medical.providers.edit', $record)->with('status', __('admin.saved'));
     }
@@ -50,8 +56,11 @@ class MedicalProviderController extends Controller
     public function update(MedicalProviderRequest $request, MedicalProvider $provider): RedirectResponse
     {
         $this->authorize('update', $provider);
-        $provider->update($this->payload($request, $provider));
-        $this->sync($request, $provider);
+        $payload = $this->payload($request, $provider);
+        DB::transaction(function () use ($request, $provider, $payload) {
+            $provider->update($payload);
+            $this->sync($request, $provider);
+        });
 
         return redirect()->route('admin.medical.providers.edit', $provider)->with('status', __('admin.saved'));
     }
@@ -59,6 +68,7 @@ class MedicalProviderController extends Controller
     public function destroy(MedicalProvider $provider): RedirectResponse
     {
         $this->authorize('delete', $provider);
+        $this->requireDeleteConfirmation();
         ImageStore::delete($provider->cover_path);
         $provider->delete();
 

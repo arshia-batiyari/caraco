@@ -16,7 +16,7 @@ class TravelStyleController extends Controller
         $this->authorize('viewAny', TravelStyle::class);
 
         return view('admin.styles.index', [
-            'records' => TravelStyle::query()->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(TravelStyle::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -61,6 +61,7 @@ class TravelStyleController extends Controller
     public function destroy(TravelStyle $style): RedirectResponse
     {
         $this->authorize('delete', $style);
+        $this->requireDeleteConfirmation();
         $style->delete();
 
         return redirect()->route('admin.styles.index')->with('status', __('admin.saved'));

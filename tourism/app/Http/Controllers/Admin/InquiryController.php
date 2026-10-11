@@ -16,7 +16,7 @@ class InquiryController extends Controller
         $this->authorize('viewAny', Inquiry::class);
 
         return view('admin.inquiries.index', [
-            'records' => Inquiry::query()->with('assignee')->latest()->paginate(20),
+            'records' => \App\Support\AdminList::paginate(Inquiry::query()->with('assignee'), request()),
         ]);
     }
 
@@ -45,6 +45,7 @@ class InquiryController extends Controller
     public function destroy(Inquiry $inquiry): RedirectResponse
     {
         $this->authorize('delete', $inquiry);
+        $this->requireDeleteConfirmation();
         $inquiry->delete();
 
         return redirect()->route('admin.inquiries.index')->with('status', __('admin.saved'));

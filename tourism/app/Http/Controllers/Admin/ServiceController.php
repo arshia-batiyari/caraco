@@ -16,7 +16,7 @@ class ServiceController extends Controller
         $this->authorize('viewAny', Service::class);
 
         return view('admin.services.index', [
-            'records' => Service::query()->with('translations')->orderBy('type')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(Service::query()->with('translations'), request(), 'name'),
         ]);
     }
 
@@ -63,6 +63,7 @@ class ServiceController extends Controller
     public function destroy(Service $service): RedirectResponse
     {
         $this->authorize('delete', $service);
+        $this->requireDeleteConfirmation();
         $service->delete();
 
         return redirect()->route('admin.services.index')->with('status', __('admin.saved'));

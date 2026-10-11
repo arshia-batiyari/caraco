@@ -9,7 +9,7 @@ Two independently deployable Laravel 12 applications for the KARAKO holding comp
 
 Domains are environment values. Nothing in the repository hardcodes a production host.
 
-The architecture, shared-hosting limits, and the decisions for Phase 1 are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The design system is in [docs/DESIGN.md](docs/DESIGN.md).
+The architecture, shared-hosting limits, and the decisions for Phase 1 are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The design system is in [docs/DESIGN.md](docs/DESIGN.md). Admin workflows are in [docs/ADMIN.md](docs/ADMIN.md).
 
 ## Requirements
 

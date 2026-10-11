@@ -16,7 +16,7 @@ class FaqController extends Controller
         $this->authorize('viewAny', Faq::class);
 
         return view('admin.faqs.index', [
-            'records' => Faq::query()->whereNull('tour_id')->with('translations')->orderBy('position')->get(),
+            'records' => \App\Support\AdminList::paginate(Faq::query()->whereNull('tour_id')->with('translations'), request(), 'question'),
         ]);
     }
 
@@ -65,6 +65,7 @@ class FaqController extends Controller
     {
         abort_if($faq->tour_id !== null, 404);
         $this->authorize('delete', $faq);
+        $this->requireDeleteConfirmation();
         $faq->delete();
 
         return redirect()->route('admin.faqs.index')->with('status', __('admin.saved'));

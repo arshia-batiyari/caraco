@@ -4,6 +4,11 @@
 
 @section('content')
     <h1>{{ __('admin.medical_inquiries') }}</h1>
+    @include('admin.partials.filters', [
+        'showPublished' => false,
+        'showStatus' => true,
+        'statuses' => ['new', 'reviewing', 'closed'],
+    ])
     @if ($records->isEmpty())
         <x-empty-state :title="__('admin.empty')" />
     @else

@@ -16,7 +16,7 @@ class MedicalInquiryController extends Controller
         $this->authorize('viewAny', MedicalInquiry::class);
 
         return view('admin.medical.inquiries.index', [
-            'records' => MedicalInquiry::query()->with('service.translations')->latest()->paginate(20),
+            'records' => \App\Support\AdminList::paginate(MedicalInquiry::query()->with('service.translations'), request()),
         ]);
     }
 
@@ -43,6 +43,7 @@ class MedicalInquiryController extends Controller
     public function destroy(MedicalInquiry $inquiry): RedirectResponse
     {
         $this->authorize('delete', $inquiry);
+        $this->requireDeleteConfirmation();
         $inquiry->delete();
 
         return redirect()->route('admin.medical.inquiries.index')->with('status', __('admin.saved'));

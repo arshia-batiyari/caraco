@@ -1,8 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>{{ __('admin.surveys') }}</h1>
-    <p><a class="k-btn k-btn-ink" href="{{ route('admin.surveys.create') }}">{{ __('admin.create') }}</a></p>
+    <div class="k-admin-heading">
+        <h1>{{ __('admin.surveys') }}</h1>
+        <a class="k-btn k-btn-ink" href="{{ route('admin.surveys.create') }}">{{ __('admin.create') }}</a>
+    </div>
+    @include('admin.partials.filters', ['showPublished' => false])
     @if ($records->isEmpty())
         <x-empty-state :title="__('admin.empty')" />
     @else
@@ -19,5 +22,6 @@
                 </tbody>
             </table>
         </div>
+        {{ $records->links() }}
     @endif
 @endsection

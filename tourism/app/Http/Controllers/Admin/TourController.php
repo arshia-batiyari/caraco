@@ -24,7 +24,7 @@ class TourController extends Controller
         $this->authorize('viewAny', Tour::class);
 
         return view('admin.tours.index', [
-            'records' => Tour::query()->with('translations')->orderBy('position')->orderByDesc('id')->get(),
+            'records' => \App\Support\AdminList::paginate(Tour::query()->with('translations'), request(), 'title'),
         ]);
     }
 
@@ -77,6 +77,7 @@ class TourController extends Controller
     public function destroy(Tour $tour): RedirectResponse
     {
         $this->authorize('delete', $tour);
+        $this->requireDeleteConfirmation();
         $tour->images->each(fn (TourImage $image) => ImageStore::delete($image->path));
         ImageStore::delete($tour->cover_path);
         $tour->delete();

@@ -59,6 +59,7 @@
             </div>
         </div>
         <label class="k-check"><input type="hidden" name="is_published" value="0"><input type="checkbox" name="is_published" value="1" @checked(filter_var(old('is_published', $record->is_published), FILTER_VALIDATE_BOOL))><span>{{ __('admin.published') }}</span></label>
+        <p class="k-field-hint">{{ __('admin.published_hint') }}</p>
         <label class="k-check"><input type="hidden" name="is_featured" value="0"><input type="checkbox" name="is_featured" value="1" @checked(filter_var(old('is_featured', $record->is_featured), FILTER_VALIDATE_BOOL))><span>{{ __('admin.featured') }}</span></label>
 
         <fieldset class="k-admin-set">
@@ -126,6 +127,7 @@
                     <div class="k-field"><label>{{ __('admin.return_date') }}</label><input name="departures[{{ $index }}][return_date]" type="date" value="{{ old('departures.'.$index.'.return_date', $departure->return_date?->toDateString()) }}"></div>
                 </div>
                 <label class="k-check"><input type="hidden" name="departures[{{ $index }}][is_published]" value="0"><input type="checkbox" name="departures[{{ $index }}][is_published]" value="1" @checked(filter_var(old('departures.'.$index.'.is_published', $departure->exists ? $departure->is_published : true), FILTER_VALIDATE_BOOL))><span>{{ __('admin.published') }}</span></label>
+        <p class="k-field-hint">{{ __('admin.published_hint') }}</p>
             @endforeach
         </fieldset>
 
@@ -181,6 +183,7 @@
             <legend>{{ __('admin.faqs') }}</legend>
             @foreach ($faqs->concat([new \App\Models\Faq]) as $index => $faq)
                 <label class="k-check"><input type="hidden" name="faqs[{{ $index }}][is_published]" value="0"><input type="checkbox" name="faqs[{{ $index }}][is_published]" value="1" @checked(filter_var(old('faqs.'.$index.'.is_published', $faq->exists ? $faq->is_published : true), FILTER_VALIDATE_BOOL))><span>{{ __('admin.published') }}</span></label>
+        <p class="k-field-hint">{{ __('admin.published_hint') }}</p>
                 @include('admin.partials.translation-tabs', [
                     'namePrefix' => 'faqs['.$index.'][translations]',
                     'rows' => $faq->exists ? $faq->translations->keyBy('locale') : collect(),
@@ -208,6 +211,7 @@
         <button class="k-btn k-btn-ink" type="submit">{{ __('admin.save') }}</button>
     </form>
     @if ($record->exists)
-        <form class="k-admin-delete" method="post" action="{{ route('admin.tours.destroy', $record) }}">@csrf @method('DELETE')<button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button></form>
+        <form class="k-admin-delete" method="post" action="{{ route('admin.tours.destroy', $record) }}">@csrf @method('DELETE')
+            <label class="k-check"><input type="checkbox" name="confirm_delete" value="1"><span>{{ __('admin.confirm_delete') }}</span></label><button class="k-btn k-btn-line" type="submit">{{ __('admin.delete') }}</button></form>
     @endif
 @endsection

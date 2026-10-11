@@ -17,7 +17,9 @@ class DashboardController extends Controller
             'divisions' => Division::query()->count(),
             'publishedDivisions' => Division::query()->where('is_published', true)->count(),
             'projects' => Project::query()->count(),
+            'publishedProjects' => Project::query()->where('is_published', true)->count(),
             'pages' => Page::query()->count(),
+            'publishedPages' => Page::query()->where('is_published', true)->count(),
             'inquiries' => Inquiry::query()->count(),
             'recent' => Inquiry::query()->latest()->limit(5)->get(),
         ]);

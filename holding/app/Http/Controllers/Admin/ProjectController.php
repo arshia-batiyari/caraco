@@ -9,6 +9,7 @@ use App\Support\ImageStore;
 use App\Support\LocaleText;
 use App\Support\MediaUploads;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use RuntimeException;
 
@@ -19,7 +20,7 @@ class ProjectController extends Controller
         $this->authorize('viewAny', Project::class);
 
         return view('admin.projects.index', [
-            'projects' => Project::query()->orderBy('position')->orderBy('id')->with('translations')->get(),
+            'projects' => \App\Support\AdminList::paginate(Project::query()->with('translations'), request(), 'title'),
         ]);
     }
 
@@ -42,12 +43,16 @@ class ProjectController extends Controller
             return back()->withInput()->withErrors(['image' => __('admin.validation.image')]);
         }
 
-        $project = Project::query()->create([
-            'position' => $request->integer('position'),
-            'is_published' => $request->boolean('is_published'),
-            'image_path' => $image,
-        ]);
-        $this->sync($request, $project);
+        $project = DB::transaction(function () use ($request, $image) {
+            $project = Project::query()->create([
+                'position' => $request->integer('position'),
+                'is_published' => $request->boolean('is_published'),
+                'image_path' => $image,
+            ]);
+            $this->sync($request, $project);
+
+            return $project;
+        });
 
         return redirect()->route('admin.projects.edit', $project)->with('status', __('admin.saved'));
     }
@@ -76,12 +81,14 @@ class ProjectController extends Controller
             return back()->withInput()->withErrors(['image' => __('admin.validation.image')]);
         }
 
-        $project->update([
-            'position' => $request->integer('position'),
-            'is_published' => $request->boolean('is_published'),
-            'image_path' => $image,
-        ]);
-        $this->sync($request, $project);
+        DB::transaction(function () use ($request, $project, $image) {
+            $project->update([
+                'position' => $request->integer('position'),
+                'is_published' => $request->boolean('is_published'),
+                'image_path' => $image,
+            ]);
+            $this->sync($request, $project);
+        });
 
         return redirect()->route('admin.projects.edit', $project)->with('status', __('admin.saved'));
     }
@@ -89,6 +96,7 @@ class ProjectController extends Controller
     public function destroy(Project $project): RedirectResponse
     {
         $this->authorize('delete', $project);
+        $this->requireDeleteConfirmation();
         ImageStore::delete($project->image_path);
         $project->delete();
 
