@@ -1,0 +1,47 @@
+<?php
+
+return [
+    'home' => [
+        'title' => 'Holding',
+        'eyebrow' => 'Holding company',
+        'headline' => 'Nine fields of work, held to one standard.',
+        'lede' => 'Placeholder introduction. The company history, leadership, and figures will replace this text when they are published.',
+        'image_alt' => 'Placeholder photograph of the pavilion at Dowlatabad Garden in Yazd.',
+        'statement_title' => 'A quiet international presence',
+        'statement' => 'Placeholder. This passage stands in for the holding’s own description of how its divisions work together.',
+        'statement_aside' => 'Addresses, registration details, and partner names are not invented here.',
+        'list_eyebrow' => 'Divisions',
+        'list_title' => 'The group, in order',
+        'cta_eyebrow' => 'Contact',
+        'cta_title' => 'Write to the holding.',
+        'cta_text' => 'The form checks the message and confirms it on the page. It does not store or send it yet.',
+        'cta_label' => 'Open the form',
+    ],
+    'divisions' => [
+        'title' => 'Divisions',
+        'eyebrow' => 'The group',
+        'headline' => 'Nine areas, in the holding’s order.',
+        'lede' => 'Placeholder index. Each area will have its own page later. These lines are not published service descriptions.',
+        'image_alt' => 'Placeholder photograph of columns at Persepolis.',
+        'image_caption' => 'Persepolis. Placeholder photograph, not a KARAKO property.',
+        'items' => [
+            ['slug' => 'tourism', 'title' => 'Tourism and advertising agency', 'text' => 'Placeholder. Travel programs are presented on the separate tourism website.'],
+            ['slug' => 'real-estate', 'title' => 'Real estate', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'commercial', 'title' => 'Commercial services', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'agriculture', 'title' => 'Agriculture', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'engineering', 'title' => 'Technical and engineering services', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'legal', 'title' => 'Legal and administrative services', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'trading', 'title' => 'General commerce and trading', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'construction', 'title' => 'Construction and building', 'text' => 'Placeholder. A published description will replace this line.'],
+            ['slug' => 'social', 'title' => 'Social activities and charitable initiatives', 'text' => 'Placeholder. A published description will replace this line.'],
+        ],
+    ],
+    'contact' => [
+        'title' => 'Contact',
+        'eyebrow' => 'Correspondence',
+        'headline' => 'Send a note to the holding.',
+        'lede' => 'This sample validates the form. A confirmation appears on this page. The message is not stored or emailed.',
+        'sent' => 'The sample accepted this message. Nothing was stored or sent.',
+        'submit' => 'Send message',
+    ],
+];
