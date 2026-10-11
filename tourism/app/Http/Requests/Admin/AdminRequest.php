@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Support\HttpUrl;
 use Closure;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -56,6 +57,34 @@ abstract class AdminRequest extends FormRequest
     /**
      * @return array<int, mixed>
      */
+    protected function requirePublishedText(Validator $validator, string $column): void
+    {
+        $validator->after(function (Validator $validator) use ($column) {
+            if (! $this->boolean('is_published') || $validator->errors()->isNotEmpty()) {
+                return;
+            }
+            foreach ((array) $this->input('translations', []) as $row) {
+                if (is_array($row) && filled($row[$column] ?? null)) {
+                    return;
+                }
+            }
+            $validator->errors()->add('is_published', __('admin.validation.publish'));
+        });
+    }
+
+    protected function requireCoordinatePair(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $lat = $this->input('latitude');
+            $lng = $this->input('longitude');
+            $hasLat = filled($lat);
+            $hasLng = filled($lng);
+            if ($hasLat !== $hasLng) {
+                $validator->errors()->add('latitude', __('admin.validation.coordinates'));
+            }
+        });
+    }
+
     protected function httpRule(bool $required = false): array
     {
         return array_values(array_filter([

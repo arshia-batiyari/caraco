@@ -30,6 +30,8 @@ class SiteComposer
             'navLinks' => [
                 ['url' => route('home'), 'label' => __('ui.nav.home'), 'active' => $home, 'external' => false],
                 ['url' => route('tours.index'), 'label' => __('ui.nav.tours'), 'active' => request()->routeIs('tours.*'), 'external' => false],
+                ['url' => route('attractions.index'), 'label' => __('ui.nav.attractions'), 'active' => request()->routeIs('attractions.*'), 'external' => false],
+                ['url' => route('medical.index'), 'label' => __('ui.nav.medical'), 'active' => request()->routeIs('medical.*'), 'external' => false],
                 ['url' => route('feedback.index'), 'label' => __('ui.nav.feedback'), 'active' => request()->routeIs('feedback.*'), 'external' => false],
                 ['url' => route('consultation'), 'label' => __('ui.nav.consultation'), 'active' => request()->routeIs('consultation'), 'external' => false],
             ],

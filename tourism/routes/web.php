@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AttractionCategoryController;
+use App\Http\Controllers\Admin\AttractionController as AdminAttractionController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -9,6 +11,14 @@ use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\HomepageController;
 use App\Http\Controllers\Admin\HotelController as AdminHotelController;
 use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\MedicalCategoryController;
+use App\Http\Controllers\Admin\MedicalDoctorController;
+use App\Http\Controllers\Admin\MedicalFaqController;
+use App\Http\Controllers\Admin\MedicalInquiryController;
+use App\Http\Controllers\Admin\MedicalPageController;
+use App\Http\Controllers\Admin\MedicalProviderController;
+use App\Http\Controllers\Admin\MedicalServiceController;
+use App\Http\Controllers\Admin\MedicalStepController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\SurveyController as AdminSurveyController;
@@ -16,8 +26,10 @@ use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\TransportOptionController;
 use App\Http\Controllers\Admin\TravelStyleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AttractionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
@@ -52,6 +64,15 @@ Route::prefix('{locale}')
         Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:5,1')->name('feedback.store');
         Route::get('/feedback/surveys/{survey}', [SurveyController::class, 'show'])->whereNumber('survey')->name('feedback.surveys.show');
         Route::post('/feedback/surveys/{survey}', [SurveyController::class, 'store'])->whereNumber('survey')->middleware('throttle:5,1')->name('feedback.surveys.store');
+        Route::get('/medical', [MedicalController::class, 'index'])->name('medical.index');
+        Route::get('/medical/services', [MedicalController::class, 'services'])->name('medical.services');
+        Route::get('/medical/services/{slug}', [MedicalController::class, 'service'])->name('medical.services.show');
+        Route::get('/medical/categories/{slug}', [MedicalController::class, 'category'])->name('medical.categories.show');
+        Route::get('/medical/clinics/{slug}', [MedicalController::class, 'provider'])->name('medical.providers.show');
+        Route::get('/medical/doctors/{slug}', [MedicalController::class, 'doctor'])->name('medical.doctors.show');
+        Route::post('/medical/consultation', [MedicalController::class, 'store'])->middleware('throttle:5,1')->name('medical.store');
+        Route::get('/attractions', [AttractionController::class, 'index'])->name('attractions.index');
+        Route::get('/attractions/{slug}', [AttractionController::class, 'show'])->name('attractions.show');
         Route::get('/info/{slug}', [PageController::class, 'show'])->name('pages.show');
         Route::get('/foundations', [TourismPageController::class, 'foundations'])->name('foundations');
         Route::get('/credits', [TourismPageController::class, 'credits'])->name('credits');
@@ -150,6 +171,71 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/surveys/{survey}', [AdminSurveyController::class, 'edit'])->name('surveys.edit');
         Route::put('/surveys/{survey}', [AdminSurveyController::class, 'update'])->name('surveys.update');
         Route::delete('/surveys/{survey}', [AdminSurveyController::class, 'destroy'])->name('surveys.destroy');
+
+        Route::get('/medical', [MedicalPageController::class, 'home'])->name('medical.home');
+        Route::get('/medical/page', [MedicalPageController::class, 'edit'])->name('medical.page');
+        Route::put('/medical/page', [MedicalPageController::class, 'update'])->name('medical.page.update');
+
+        Route::get('/medical/categories', [MedicalCategoryController::class, 'index'])->name('medical.categories.index');
+        Route::get('/medical/categories/create', [MedicalCategoryController::class, 'create'])->name('medical.categories.create');
+        Route::post('/medical/categories', [MedicalCategoryController::class, 'store'])->name('medical.categories.store');
+        Route::get('/medical/categories/{category}', [MedicalCategoryController::class, 'edit'])->name('medical.categories.edit');
+        Route::put('/medical/categories/{category}', [MedicalCategoryController::class, 'update'])->name('medical.categories.update');
+        Route::delete('/medical/categories/{category}', [MedicalCategoryController::class, 'destroy'])->name('medical.categories.destroy');
+
+        Route::get('/medical/services', [MedicalServiceController::class, 'index'])->name('medical.services.index');
+        Route::get('/medical/services/create', [MedicalServiceController::class, 'create'])->name('medical.services.create');
+        Route::post('/medical/services', [MedicalServiceController::class, 'store'])->name('medical.services.store');
+        Route::get('/medical/services/{service}', [MedicalServiceController::class, 'edit'])->name('medical.services.edit');
+        Route::put('/medical/services/{service}', [MedicalServiceController::class, 'update'])->name('medical.services.update');
+        Route::delete('/medical/services/{service}', [MedicalServiceController::class, 'destroy'])->name('medical.services.destroy');
+
+        Route::get('/medical/clinics', [MedicalProviderController::class, 'index'])->name('medical.providers.index');
+        Route::get('/medical/clinics/create', [MedicalProviderController::class, 'create'])->name('medical.providers.create');
+        Route::post('/medical/clinics', [MedicalProviderController::class, 'store'])->name('medical.providers.store');
+        Route::get('/medical/clinics/{provider}', [MedicalProviderController::class, 'edit'])->name('medical.providers.edit');
+        Route::put('/medical/clinics/{provider}', [MedicalProviderController::class, 'update'])->name('medical.providers.update');
+        Route::delete('/medical/clinics/{provider}', [MedicalProviderController::class, 'destroy'])->name('medical.providers.destroy');
+
+        Route::get('/medical/doctors', [MedicalDoctorController::class, 'index'])->name('medical.doctors.index');
+        Route::get('/medical/doctors/create', [MedicalDoctorController::class, 'create'])->name('medical.doctors.create');
+        Route::post('/medical/doctors', [MedicalDoctorController::class, 'store'])->name('medical.doctors.store');
+        Route::get('/medical/doctors/{doctor}', [MedicalDoctorController::class, 'edit'])->name('medical.doctors.edit');
+        Route::put('/medical/doctors/{doctor}', [MedicalDoctorController::class, 'update'])->name('medical.doctors.update');
+        Route::delete('/medical/doctors/{doctor}', [MedicalDoctorController::class, 'destroy'])->name('medical.doctors.destroy');
+
+        Route::get('/medical/steps', [MedicalStepController::class, 'index'])->name('medical.steps.index');
+        Route::get('/medical/steps/create', [MedicalStepController::class, 'create'])->name('medical.steps.create');
+        Route::post('/medical/steps', [MedicalStepController::class, 'store'])->name('medical.steps.store');
+        Route::get('/medical/steps/{step}', [MedicalStepController::class, 'edit'])->name('medical.steps.edit');
+        Route::put('/medical/steps/{step}', [MedicalStepController::class, 'update'])->name('medical.steps.update');
+        Route::delete('/medical/steps/{step}', [MedicalStepController::class, 'destroy'])->name('medical.steps.destroy');
+
+        Route::get('/medical/faqs', [MedicalFaqController::class, 'index'])->name('medical.faqs.index');
+        Route::get('/medical/faqs/create', [MedicalFaqController::class, 'create'])->name('medical.faqs.create');
+        Route::post('/medical/faqs', [MedicalFaqController::class, 'store'])->name('medical.faqs.store');
+        Route::get('/medical/faqs/{faq}', [MedicalFaqController::class, 'edit'])->name('medical.faqs.edit');
+        Route::put('/medical/faqs/{faq}', [MedicalFaqController::class, 'update'])->name('medical.faqs.update');
+        Route::delete('/medical/faqs/{faq}', [MedicalFaqController::class, 'destroy'])->name('medical.faqs.destroy');
+
+        Route::get('/medical/inquiries', [MedicalInquiryController::class, 'index'])->name('medical.inquiries.index');
+        Route::get('/medical/inquiries/{inquiry}', [MedicalInquiryController::class, 'show'])->name('medical.inquiries.show');
+        Route::put('/medical/inquiries/{inquiry}', [MedicalInquiryController::class, 'update'])->name('medical.inquiries.update');
+        Route::delete('/medical/inquiries/{inquiry}', [MedicalInquiryController::class, 'destroy'])->name('medical.inquiries.destroy');
+
+        Route::get('/attractions', [AdminAttractionController::class, 'index'])->name('attractions.index');
+        Route::get('/attractions/create', [AdminAttractionController::class, 'create'])->name('attractions.create');
+        Route::post('/attractions', [AdminAttractionController::class, 'store'])->name('attractions.store');
+        Route::get('/attractions/{attraction}', [AdminAttractionController::class, 'edit'])->name('attractions.edit');
+        Route::put('/attractions/{attraction}', [AdminAttractionController::class, 'update'])->name('attractions.update');
+        Route::delete('/attractions/{attraction}', [AdminAttractionController::class, 'destroy'])->name('attractions.destroy');
+
+        Route::get('/attraction-categories', [AttractionCategoryController::class, 'index'])->name('attraction-categories.index');
+        Route::get('/attraction-categories/create', [AttractionCategoryController::class, 'create'])->name('attraction-categories.create');
+        Route::post('/attraction-categories', [AttractionCategoryController::class, 'store'])->name('attraction-categories.store');
+        Route::get('/attraction-categories/{category}', [AttractionCategoryController::class, 'edit'])->name('attraction-categories.edit');
+        Route::put('/attraction-categories/{category}', [AttractionCategoryController::class, 'update'])->name('attraction-categories.update');
+        Route::delete('/attraction-categories/{category}', [AttractionCategoryController::class, 'destroy'])->name('attraction-categories.destroy');
 
         Route::middleware('role:admin')->group(function () {
             Route::get('/users', [UserController::class, 'index'])->name('users.index');

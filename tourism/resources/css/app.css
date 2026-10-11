@@ -1690,6 +1690,127 @@ main {
     min-width: 10rem;
 }
 
+.k-notice {
+    border: 1px solid rgba(122, 92, 50, 0.35);
+    background: var(--k-ivory, #f4efe6);
+    padding: 0.9rem 1rem;
+    margin: 1rem 0;
+}
+
+.k-field-hint {
+    color: #5c564e;
+    font-size: 0.92rem;
+}
+
+.k-medical-hero,
+.k-medical-band {
+    background: #f4efe6;
+    padding: 3rem 0;
+}
+
+.k-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+}
+
+.k-steps li {
+    display: grid;
+    gap: 0.35rem;
+    padding-inline-start: 2.5rem;
+    position: relative;
+}
+
+.k-steps li::before {
+    content: counter(step);
+    counter-increment: step;
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    background: #141210;
+    color: #faf7f2;
+    display: grid;
+    place-items: center;
+    font-size: 0.85rem;
+}
+
+.k-steps {
+    counter-reset: step;
+}
+
+.k-inline-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.k-editorial-card {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.k-editorial-card img,
+.k-attraction-cover img,
+.k-media-grid img,
+.k-admin-image img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.k-attraction-cover,
+.k-media-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.k-media-grid {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.k-attraction-title {
+    max-width: 42rem;
+    margin-bottom: 1.5rem;
+}
+
+.k-unesco {
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #7a5c32;
+    font-size: 0.82rem;
+}
+
+.k-faq details {
+    border-top: 1px solid rgba(20, 18, 16, 0.12);
+    padding: 0.8rem 0;
+}
+
+.k-admin-image {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 720px) {
+    .k-medical-hero,
+    .k-medical-band {
+        padding: 2rem 0;
+    }
+
+    .k-media-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

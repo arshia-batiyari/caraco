@@ -174,6 +174,25 @@
                 @foreach (\App\Support\LocaleText::paragraphs($home?->medical_body) as $paragraph)
                     <p>{{ $paragraph }}</p>
                 @endforeach
+                @if ($hasMedical)
+                    <p><a class="k-btn k-btn-line" href="{{ route('medical.index') }}">{{ __('ui.medical.visit') }}</a></p>
+                @endif
+            </div>
+        </section>
+    @elseif ($hasMedical)
+        <section class="k-section">
+            <div class="k-wrap k-narrow">
+                <x-section-heading :title="__('ui.medical.title')" :intro="__('ui.medical.home_note')" />
+                <a class="k-btn k-btn-line" href="{{ route('medical.index') }}">{{ __('ui.medical.visit') }}</a>
+            </div>
+        </section>
+    @endif
+
+    @if ($hasAttractions)
+        <section class="k-section">
+            <div class="k-wrap k-narrow">
+                <x-section-heading :title="__('ui.attractions.title')" :intro="__('ui.attractions.description')" />
+                <a class="k-btn k-btn-line" href="{{ route('attractions.index') }}">{{ __('ui.attractions.title') }}</a>
             </div>
         </section>
     @endif

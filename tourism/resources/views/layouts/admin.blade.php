@@ -27,6 +27,8 @@
                 <a href="{{ route('admin.transports.index') }}">{{ __('admin.transports') }}</a>
                 <a href="{{ route('admin.services.index') }}">{{ __('admin.services') }}</a>
                 <a href="{{ route('admin.hotels.index') }}">{{ __('admin.hotels') }}</a>
+                <a href="{{ route('admin.medical.home') }}">{{ __('admin.medical') }}</a>
+                <a href="{{ route('admin.attractions.index') }}">{{ __('admin.attractions') }}</a>
                 <a href="{{ route('admin.faqs.index') }}">{{ __('admin.faqs') }}</a>
                 <a href="{{ route('admin.pages.index') }}">{{ __('admin.pages') }}</a>
                 <a href="{{ route('admin.inquiries.index') }}">{{ __('admin.inquiries') }}</a>

@@ -1,6 +1,6 @@
 # KARAKO technical architecture
 
-Phase 1 records the audit and the foundation. The holding site publishes its public pages from the database. The tourism application now has its own catalog, consultation inquiries, customer feedback, surveys, and admin panel.
+Phase 1 records the audit and the foundation. The holding site publishes its public pages from the database. The tourism application now has its own catalog, consultation inquiries, customer feedback, surveys, medical tourism, attractions, and admin panel.
 
 ## Audit
 
@@ -88,8 +88,14 @@ Tourism tables now migrated in `karako_tourism`:
 - `feedback_submissions`, `feedback_reviews`, and `feedback_follow_ups`
 - `surveys`, `survey_translations`, `survey_questions`, `survey_question_translations`
 - `survey_options`, `survey_option_translations`, `survey_responses`, and `survey_answers`
+- `medical_pages`, `medical_categories`, `medical_services`, `medical_providers`, `medical_doctors`, `medical_steps`, `medical_faqs`, and `medical_inquiries`, each with translation rows where the text is localized
+- `attraction_categories`, `attractions`, `attraction_images`, and `attraction_tour`
 
-Accommodation uses a free-text category. The catalog does not store star ratings. Medical tourism is optional homepage text, not a separate service catalog. There is no attractions table and no booking or payment table.
+Accommodation uses a free-text category. The catalog does not store star ratings. There is no booking or payment table.
+
+Medical tourism is a separate catalog: categories, services, clinics, optional doctor profiles, journey steps, questions, and consultation requests. The public form stores a name, contact details, an optional country, a requested service, and a question. It does not accept files or medical records. The page always states that the section is informational and is not medical advice. The application does not generate prices, credentials, or outcomes.
+
+Attractions are editor-managed places linked to a destination and an optional category. The words “UNESCO World Heritage Site” are shown only when the designation is World Heritage and the verified box is checked. A cultural, natural, or mixed classification does not by itself mean a UNESCO listing. Inscription dates and reference numbers are shown only on that verified listing. Filtered attraction URLs are `noindex`; the unfiltered index and published detail translations are in the sitemap.
 
 Customer feedback is stored separately from the catalog. A complaint never receives a public review row. Other submissions stay pending until an editor approves a review. Anonymous submissions discard the typed name. Contact details, internal notes, and recorded replies stay on the admin record. Surveys are reusable and localized. An anonymous survey does not store a name, email, or IP with the answers. A survey that already has answers keeps its questions and anonymity setting. Participation pages and filtered feedback URLs are `noindex`. The unfiltered feedback page is in the sitemap. No aggregate rating is added to JSON-LD.
 

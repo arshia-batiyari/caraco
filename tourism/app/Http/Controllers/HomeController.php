@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attraction;
+use App\Models\MedicalService;
 use App\Models\Setting;
 use App\Support\ContentPresenter;
 use App\Support\ImageStore;
@@ -32,6 +34,8 @@ class HomeController extends Controller
             'filterOptions' => $catalog->filterOptions(),
             'inquiryTours' => \App\Models\Tour::query()->published()->with('translations')->orderBy('position')->get(),
             'privacy' => $catalog->privacyPage(),
+            'hasMedical' => MedicalService::query()->published()->exists(),
+            'hasAttractions' => Attraction::query()->published()->exists(),
             'schema' => $this->schema($email, $phone, $home?->hero_lede),
         ], new SeoData(
             title: $presenter->documentTitle($home?->meta_title, filled($home?->hero_title) ? (string) $home->hero_title : 'KARAKO'),
