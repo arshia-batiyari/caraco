@@ -29,14 +29,14 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AttractionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConsultationController;
-use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\MapTileController;
+use App\Http\Controllers\MedicalController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SeoController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TourismPageController;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +47,7 @@ Route::get('/map-tiles/{z}/{x}/{y}', MapTileController::class)
     ->whereNumber(['z', 'x', 'y'])
     ->name('map.tiles');
 
-Route::redirect('/', '/fa');
+Route::redirect('/', '/fa', 301);
 
 Route::prefix('{locale}')
     ->whereIn('locale', array_keys(config('karako.locales')))

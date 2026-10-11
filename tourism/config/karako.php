@@ -19,6 +19,9 @@ return [
 
     'related_url' => env('HOLDING_URL'),
 
+    // Absolute web root when the host cannot point the domain at public/.
+    'public_path' => env('KARAKO_PUBLIC_PATH'),
+
     /*
     |--------------------------------------------------------------------------
     | Locales

@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
-Route::redirect('/', '/fa');
+Route::redirect('/', '/fa', 301);
 
 Route::prefix('{locale}')
     ->whereIn('locale', array_keys(config('karako.locales')))

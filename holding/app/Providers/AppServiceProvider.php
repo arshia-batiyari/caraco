@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Support\SecureUrls;
 use App\View\SiteComposer;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +17,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $path = config('karako.public_path');
+        if (is_string($path) && $path !== '') {
+            $this->app->usePublicPath($path);
+        }
     }
 
     /**
@@ -24,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        SecureUrls::apply();
         Paginator::defaultView('pagination.karako');
         Paginator::defaultSimpleView('pagination.karako');
         View::composer('layouts.site', SiteComposer::class);

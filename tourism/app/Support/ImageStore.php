@@ -48,14 +48,22 @@ class ImageStore
 
         $id = Str::uuid()->toString();
         $directory = trim($directory, '/');
-        $extension = strtolower($file->getClientOriginalExtension() ?: 'bin');
-        $extension = preg_replace('/[^a-z0-9]/', '', $extension) ?: 'bin';
-        Storage::disk('public')->put($directory.'/'.$id.'-source.'.$extension, $contents);
+        Storage::disk('public')->put($directory.'/'.$id.'-source.'.self::sourceExtension($file), $contents);
 
         $path = $directory.'/'.$id.'.jpg';
         Storage::disk('public')->put($path, $jpeg);
 
         return $path;
+    }
+
+    private static function sourceExtension(UploadedFile $file): string
+    {
+        return match ($file->getMimeType()) {
+            'image/jpeg', 'image/jpg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp',
+            default => 'bin',
+        };
     }
 
     public static function delete(?string $path): void
