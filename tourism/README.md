@@ -1,6 +1,6 @@
 # KARAKO Tourism
 
-Laravel 12 application for the tourism subdomain. Architecture and deploy notes: [../docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md).
+Laravel 12 application for the tourism subdomain. Architecture: [../docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md). Shared-hosting steps: [../docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md). This app: [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ```bash
 cp .env.example .env

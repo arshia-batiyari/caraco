@@ -132,11 +132,13 @@ Visual direction: charcoal and near-black surfaces, gold as an accent, ivory tex
 
 The `public` disk (`storage/app/public`) stores uploads. `php artisan storage:link` creates `public/storage`. On shared hosting where symlinks are disabled, copy or map that path in the panel, or serve files through an authenticated controller for private originals and a public copy for published images.
 
-Images: accept `jpg`, `png`, `webp`; limit size; store the original; generate a display derivative with GD, which is already installed. Do not add an image package until a phase needs it.
+Images: accept `jpg`, `png`, `webp`; limit size; store the original using the detected image type (`jpg`, `png`, `webp`, or `bin`); generate a display JPEG with GD. The visitor-supplied filename is not used as the stored extension. Do not add an image package until a phase needs it.
 
 Video: an introduction video is optional. Store an uploaded `mp4` under the same disk or save an external URL. If neither is set, the template does not render the section. Do not assume FFmpeg or a video transcoding worker.
 
 ## Shared-hosting deployment
+
+The operational procedure, including a document-root layout that keeps the application source outside the web root, is in [DEPLOYMENT.md](DEPLOYMENT.md). Each app is deployed on its own.
 
 Each app is a normal PHP document root pointed at its `public/` directory.
 
@@ -176,7 +178,9 @@ Runtime choices for a host without root, Redis, or Supervisor:
 - Upload rules: extension, MIME type, and size. Store outside the document root until published.
 - Inquiries are throttled.
 - Passwords use the framework hasher.
-- Security headers and HTTPS are set at the host. The apps trust `APP_URL` and do not hardcode scheme or host.
+- Responses send `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, and `Permissions-Policy`. A strict Content-Security-Policy is not set, because the public pages include inline JSON-LD.
+- When `APP_URL` starts with `https://`, generated URLs use HTTPS and the session cookie is marked secure. The host still terminates TLS. The apps do not hardcode a domain.
+- Uploads under `/storage` are blocked from running as PHP by `public/.htaccess`. Nginx needs the equivalent rule in [DEPLOYMENT.md](DEPLOYMENT.md).
 - Dependencies stay on the locked Laravel 12 set. No extra admin package until a phase needs one.
 
 ## SEO
@@ -191,12 +195,7 @@ Division and tourism pages that are unpublished or have no translation are omitt
 
 PHPUnit 11, with `DB_CONNECTION=sqlite` and `DB_DATABASE=:memory:` inside `phpunit.xml`. Tests do not need MySQL.
 
-Phase 1 covers:
-
-- The stock homepage responds with HTTP 200.
-- `config/karako.php` exposes the four locales and the correct site key.
-
-Later phases add feature tests for publishing, locale fallback, authorization, and inquiry validation. Run `php artisan test` in each app. Run `php artisan migrate` against MySQL or MariaDB before calling a schema change done. Check RTL and LTR in a browser when templates exist.
+Run `php artisan test` in `holding/` and again in `tourism/`. The suites cover locale rendering, publication, authorization, inquiries, catalog rules, feedback, medical and attraction wording, admin lists, and the production checks added in the final audit (security headers, JSON-LD escaping, upload filenames, settings cache, HTTPS cookies). Run `php artisan migrate` against MySQL or MariaDB before calling a schema change done. Check RTL and LTR in a browser when templates change.
 
 ## Risks
 
