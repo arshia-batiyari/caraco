@@ -44,7 +44,7 @@
             @media (max-width: 959px) {
                 .k-panel { position: static !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
             }
-            .k-locale-panel { display: block !important; }
+            .k-locale-menu { display: block !important; position: static !important; }
         </style>
     </noscript>
 </head>
@@ -53,19 +53,22 @@
     <header class="k-header {{ trim($__env->yieldContent('header_tone')) }}" data-nav>
         <div class="k-header-bar k-wrap-wide">
             <x-brand-mark />
+            <div class="k-panel" id="primary-menu" data-menu-panel>
+                <nav class="k-nav" aria-label="{{ __('ui.primary_nav') }}">
+                    @foreach ($navLinks as $link)
+                        @continue($link['url'] === route('consultation'))
+                        <a href="{{ $link['url'] }}" @if ($link['active']) aria-current="page" @endif>{{ $link['label'] }}</a>
+                    @endforeach
+                </nav>
+                <div class="k-header-end">
+                    <x-language-switcher :alternates="$alternates" />
+                    <a class="k-header-cta" href="{{ route('consultation') }}">{{ __('ui.nav.consultation') }}</a>
+                </div>
+            </div>
             <button type="button" class="k-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="primary-menu">
                 <span class="k-menu-icon" aria-hidden="true"></span>
                 <span class="k-sr">{{ __('ui.menu') }}</span>
             </button>
-            <div class="k-panel" id="primary-menu" data-menu-panel>
-                <nav class="k-nav" aria-label="{{ __('ui.primary_nav') }}">
-                    @foreach ($navLinks as $link)
-                        <a href="{{ $link['url'] }}" @if ($link['active']) aria-current="page" @endif>{{ $link['label'] }}</a>
-                    @endforeach
-                </nav>
-                <a class="k-btn k-btn-gold" href="{{ route('consultation') }}">{{ __('ui.nav.consultation') }}</a>
-                <x-language-switcher :alternates="$alternates" />
-            </div>
         </div>
     </header>
 

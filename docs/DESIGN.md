@@ -30,7 +30,7 @@ Direction comes from `config/karako.php`: `fa` and `ar` are RTL, `en` and `ru` a
 
 ## Logo
 
-The official mark is the gold CARACO lockup in `public/brand/logo.png` in each application. `resources/views/components/logo.blade.php` renders it. The header and the login page sit it on an ink plate so the gold stays visible on ivory. The footer, the empty homepage masthead, and the admin chrome sit it directly on charcoal. The browser icon is the triangle from the same file. Do not redraw the mark.
+The official mark is the gold CARACO lockup in `public/brand/logo.png` in each application. `resources/views/components/logo.blade.php` renders it. The public header, footer, empty homepage masthead, and admin chrome sit the lockup on charcoal so the gold stays readable. The login page keeps an ink plate because that screen is ivory. The browser icon is the triangle from the same file. Do not redraw the mark. The public header is a single charcoal row: logo, text navigation, a compact language menu, and one underlined contact or consultation link.
 
 ## Components
 

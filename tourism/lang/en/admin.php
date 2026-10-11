@@ -177,6 +177,7 @@ return [
     'assignee' => 'Assigned to',
     'note' => 'Internal note',
     'role' => 'Role',
+    'dashboard_lead' => 'Tour publication, open requests, and feedback waiting for review.',
     'recent_inquiries' => 'Recent requests',
     'auth' => [
         'failed' => 'Those credentials were not accepted.',
