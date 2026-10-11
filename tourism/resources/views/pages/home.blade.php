@@ -26,7 +26,7 @@
                     @if (filled($home?->hero_title))
                         <h1>{{ $home->hero_title }}</h1>
                     @else
-                        <h1 class="k-wordmark" translate="no">KARAKO</h1>
+                        <h1 class="k-wordmark"><x-logo size="masthead" /></h1>
                     @endif
                     @if (filled($home?->hero_lede))
                         <p class="k-lede">{{ $home->hero_lede }}</p>

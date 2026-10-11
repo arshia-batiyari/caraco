@@ -13,6 +13,8 @@ class DesignSystemTest extends TestCase
             ->assertOk()
             ->assertSee('dir="rtl"', false)
             ->assertSee('lang="fa"', false)
+            ->assertSee('brand/logo.png', false)
+            ->assertSee('alt="CARACO"', false)
             ->assertSee('KARAKO')
             ->assertSee('تماس با ما')
             ->assertDontSee('نُه زمینهٔ کار، با یک معیار.')
@@ -27,6 +29,8 @@ class DesignSystemTest extends TestCase
         $this->get('/en')
             ->assertOk()
             ->assertSee('dir="ltr"', false)
+            ->assertSee('brand/logo.png', false)
+            ->assertSee('alt="CARACO"', false)
             ->assertSee('KARAKO')
             ->assertDontSee('Nine fields of work, held to one standard.')
             ->assertDontSee('Sample interface');

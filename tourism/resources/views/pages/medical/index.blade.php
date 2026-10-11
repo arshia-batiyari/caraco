@@ -5,7 +5,7 @@
     <x-breadcrumbs :items="$crumbs" />
     <header class="k-medical-hero">
         <div class="k-wrap k-narrow">
-            <p class="k-eyebrow">KARAKO</p>
+            <p class="k-logo-plate"><x-logo /></p>
             <h1>{{ filled($copy?->title) ? $copy->title : __('ui.medical.title') }}</h1>
             @if (filled($copy?->summary))
                 <p class="k-lede">{{ $copy->summary }}</p>

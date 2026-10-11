@@ -11,6 +11,8 @@ class DesignSystemTest extends TestCase
         $this->get('/fa')
             ->assertOk()
             ->assertSee('dir="rtl"', false)
+            ->assertSee('brand/logo.png', false)
+            ->assertSee('alt="CARACO"', false)
             ->assertSee('KARAKO')
             ->assertDontSee('fonts.bunny.net')
             ->assertDontSee('<video', false)

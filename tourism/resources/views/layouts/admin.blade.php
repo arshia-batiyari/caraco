@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" href="{{ asset('brand/favicon.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('brand/apple-touch-icon.png') }}">
     <title>@yield('title', __('admin.dashboard')) — KARAKO</title>
     <meta name="robots" content="noindex, nofollow">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,7 +24,7 @@
                 <div class="k-wrap-wide k-admin-bar-inner">
                     <label class="k-admin-menu" for="k-admin-nav-toggle">{{ __('admin.menu') }}</label>
                     <a class="k-brand" href="{{ route('admin.dashboard') }}">
-                        <span class="k-brand-name" translate="no">KARAKO</span>
+                        <x-logo size="admin" />
                         <span class="k-brand-line">{{ __('admin.panel') }}</span>
                     </a>
                     <form method="post" action="{{ route('admin.logout') }}">

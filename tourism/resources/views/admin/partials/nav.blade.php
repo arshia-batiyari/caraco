@@ -1,5 +1,5 @@
 <a class="k-admin-brand" href="{{ route('admin.dashboard') }}">
-    <span class="k-brand-name" translate="no">KARAKO</span>
+    <x-logo size="side" />
     <span class="k-brand-line">{{ __('admin.panel') }}</span>
 </a>
 <nav aria-label="{{ __('admin.panel') }}">

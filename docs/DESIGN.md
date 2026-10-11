@@ -26,11 +26,11 @@ Fonts are OFL families imported from `@fontsource` and bundled by Vite. Nothing 
 | Persian, Arabic | Vazirmatn 600 | Vazirmatn 400 |
 | English, Russian | Literata 500 | Source Sans 3 |
 
-The Latin wordmark `KARAKO` stays in Literata in every language. Direction comes from `config/karako.php`: `fa` and `ar` are RTL, `en` and `ru` are LTR.
+Direction comes from `config/karako.php`: `fa` and `ar` are RTL, `en` and `ru` are LTR.
 
 ## Logo
 
-The supplied logo file is not in the repository. The header uses a typographic wordmark in `resources/views/components/brand-mark.blade.php`. Replace that component when the official gold logo file arrives. Do not draw a new geometric symbol.
+The official mark is the gold CARACO lockup in `public/brand/logo.png` in each application. `resources/views/components/logo.blade.php` renders it. The header and the login page sit it on an ink plate so the gold stays visible on ivory. The footer, the empty homepage masthead, and the admin chrome sit it directly on charcoal. The browser icon is the triangle from the same file. Do not redraw the mark.
 
 ## Components
 

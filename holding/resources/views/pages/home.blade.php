@@ -24,7 +24,7 @@
                     @if (filled($home?->hero_eyebrow))
                         <p class="k-eyebrow">{{ $home->hero_eyebrow }}</p>
                     @endif
-                    <h1 class="k-wordmark" translate="no">KARAKO</h1>
+                    <h1 class="k-wordmark"><x-logo size="masthead" /></h1>
                     @if (filled($home?->hero_lede))
                         <p class="k-lede">{{ $home->hero_lede }}</p>
                     @endif

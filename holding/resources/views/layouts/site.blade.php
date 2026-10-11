@@ -12,6 +12,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" href="{{ asset('brand/favicon.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('brand/apple-touch-icon.png') }}">
     <title>{{ $seoTitle }}</title>
     @if ($seoDescription !== '')
         <meta name="description" content="{{ $seoDescription }}">
@@ -92,7 +95,7 @@
     <footer class="k-footer">
         <div class="k-wrap k-footer-grid">
             <div>
-                <p class="k-footer-brand" translate="no">KARAKO</p>
+                <a class="k-footer-brand" href="{{ route('home') }}"><x-logo size="footer" /></a>
                 @if (filled($footerSummary))
                     <p>{{ $footerSummary }}</p>
                 @endif

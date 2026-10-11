@@ -16,7 +16,7 @@ The checked-out branch contained only `README.md`. That workspace was not an exi
 | npm | 10.9.9 |
 | Database server | MariaDB 10.11.14, used here as the local MySQL-compatible server |
 
-No logo file was present in the workspace. Later phases must use supplied logo files and must not redraw the mark.
+The official logo is `public/brand/logo.png` in each application. Do not redraw the mark.
 
 ## Version decision
 
@@ -126,7 +126,7 @@ Production servers never run `npm` or Vite. Build locally or in CI, then upload 
 
 Fonts are OFL families bundled by Vite from `@fontsource` (build time only): Vazirmatn for Persian and Arabic, Literata for Latin and Cyrillic headings, Source Sans 3 for Latin and Cyrillic text. Do not load Google Fonts or other third-party stylesheets at runtime.
 
-Visual direction: charcoal and near-black surfaces, gold as an accent, ivory text areas, neutral gray. Tokens, components, and sample pages are documented in [DESIGN.md](DESIGN.md). The official logo file was not in the repository; the header uses a typographic wordmark until that file is added. Do not invent a geometric symbol. Gold is not a body-text color on ivory; small gold text uses `#7a5c32`.
+Visual direction: charcoal and near-black surfaces, gold as an accent, ivory text areas, neutral gray. Tokens, components, and sample pages are documented in [DESIGN.md](DESIGN.md). The header, footer, masthead, and admin use `public/brand/logo.png`. Gold is not a body-text color on ivory; small gold text uses `#7a5c32`.
 
 ## Images and video
 
@@ -205,6 +205,6 @@ Run `php artisan test` in `holding/` and again in `tourism/`. The suites cover l
 | This machine runs PHP 8.3 while the host runs 8.2 | `config.platform.php` is 8.2.28. Do not adopt 8.3-only language features. |
 | Shared hosts block symlinks, cron, or SSH | Document root is `public/`. File cache and file sessions. Queue is sync. Storage link has a non-symlink fallback. |
 | `origin/master` looks like a Laravel app and is easy to reuse by mistake | Do not merge it. It is a different product and is missing its views. |
-| Logo and company facts are not in the repo | Use labeled placeholders. Do not invent an address, a statistic, or a logo. |
+| Company facts beyond the logo are not in the repo | Use the supplied mark in `public/brand/logo.png`. Do not invent an address or a statistic. |
 | Two apps can drift visually | Repeat the same CSS tokens and font files. Do not extract a shared package until both designs have settled. |
 | Built assets forgotten on deploy | `public/build` is required in the upload even though it is gitignored. |
