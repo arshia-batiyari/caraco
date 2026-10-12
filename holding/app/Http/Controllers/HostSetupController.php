@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\EnsureAppKey;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Throwable;
@@ -19,6 +20,14 @@ class HostSetupController extends Controller
 
     private function keyGenerate(): string
     {
+        if (EnsureAppKey::$error !== null) {
+            return EnsureAppKey::$error;
+        }
+
+        if (EnsureAppKey::$generated) {
+            return 'Application key set successfully.';
+        }
+
         if (filled(config('app.key'))) {
             return 'APP_KEY is already set.';
         }
@@ -47,9 +56,11 @@ class HostSetupController extends Controller
                 }
             }
 
-            return $output !== '' ? $output : 'migrate finished.';
+            $body = $output !== '' ? $output : 'migrate finished.';
+
+            return "migrate --force\n".$body;
         } catch (Throwable $exception) {
-            return $exception->getMessage();
+            return "migrate --force\n".$exception->getMessage();
         }
     }
 

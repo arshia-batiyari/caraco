@@ -142,7 +142,7 @@ php artisan karako:prepare
 
 That command writes `APP_KEY` only when the line is empty, and it also creates the storage link from the next section. Use a different key for holding and tourism. Do not run `key:generate --force` on an application that already has sessions or encrypted values.
 
-After the files are on the host, open `/setup` once in the browser. On the holding domain that is `https://example.com/setup`, and on the tourism domain it is the same path. The page runs `key:generate`, `migrate --force`, and `storage:link`. Holding also seeds the nine divisions the first time that table is empty. When `APP_KEY` is already filled, the page leaves the key. Do the same on the other domain.
+After the files are on the host, open `/setup` once in the browser. On the holding domain that is `https://example.com/setup`, and on the tourism domain it is the same path. Laravel refuses to start when `APP_KEY` is empty, so the application writes that key while it boots, before the page runs. The page then runs `migrate --force` and `storage:link`. Holding also seeds the nine divisions the first time that table is empty. When `APP_KEY` is already filled, the page leaves the key. Do the same on the other domain. The `.env` file must be writable by PHP.
 
 Production values that matter:
 

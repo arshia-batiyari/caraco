@@ -17,6 +17,7 @@ class HostSetupRouteTest extends TestCase
             ->assertOk()
             ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
             ->assertSee('APP_KEY is already set.')
+            ->assertSee('migrate --force')
             ->assertSee('Nothing to migrate')
             ->assertSee('public/storage link already exists.');
 
@@ -43,6 +44,9 @@ class HostSetupRouteTest extends TestCase
         }
         touch($path);
 
+        $originalDatabase = config('database.connections.sqlite.database');
+        $originalPdo = DB::connection('sqlite')->getPdo();
+
         config([
             'database.connections.sqlite.database' => $path,
         ]);
@@ -60,7 +64,13 @@ class HostSetupRouteTest extends TestCase
                 ->assertOk()
                 ->assertSee('Nothing to migrate');
         } finally {
+            while ($originalPdo->inTransaction()) {
+                $originalPdo->rollBack();
+            }
             DB::disconnect('sqlite');
+            config(['database.connections.sqlite.database' => $originalDatabase]);
+            DB::purge('sqlite');
+            DB::connection('sqlite')->setPdo($originalPdo);
             if (is_file($path)) {
                 unlink($path);
             }
