@@ -20,6 +20,13 @@
 @import "@fontsource/manrope/cyrillic-400.css";
 @import "@fontsource/manrope/cyrillic-500.css";
 @import "@fontsource/manrope/cyrillic-600.css";
+@import "@fontsource/dm-sans/latin-400.css";
+@import "@fontsource/dm-sans/latin-500.css";
+@import "@fontsource/dm-sans/latin-600.css";
+@import "@fontsource/inter-tight/latin-500.css";
+@import "@fontsource/inter-tight/latin-600.css";
+@import "@fontsource/inter-tight/cyrillic-500.css";
+@import "@fontsource/inter-tight/cyrillic-600.css";
 
 @import "tailwindcss";
 
@@ -3465,5 +3472,602 @@ html.has-cursor select {
     html.has-cursor a,
     html.has-cursor button {
         cursor: auto;
+    }
+}
+
+/* Business template language for the holding site. */
+
+body:not(.k-admin) {
+    background: #fff;
+    color: #5b696d;
+    font-family: "DM Sans", "Source Sans 3", "Vazirmatn", sans-serif;
+}
+
+:lang(fa) body:not(.k-admin),
+:lang(ar) body:not(.k-admin) {
+    font-family: "Vazirmatn", sans-serif;
+}
+
+:lang(en) body:not(.k-admin) :is(h1, h2, h3),
+:lang(ru) body:not(.k-admin) :is(h1, h2, h3) {
+    font-family: "Inter Tight", "DM Sans", sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    color: #223035;
+}
+
+body:not(.k-admin) .k-header {
+    background: #fff;
+    color: #223035;
+    border-bottom: 1px solid #f0f2f2;
+    box-shadow: none;
+}
+
+body:not(.k-admin) .k-header.is-stuck {
+    box-shadow: 0 10px 30px rgba(0, 17, 17, 0.06);
+}
+
+body:not(.k-admin) .k-logo-plate,
+body:not(.k-admin) .k-header .k-brand {
+    background: #001111;
+    border-radius: 14px;
+    padding: 0.28rem 0.55rem 0.2rem;
+}
+
+body:not(.k-admin) .k-header .k-logo {
+    height: 3.15rem;
+}
+
+body:not(.k-admin) .k-header .k-nav a,
+body:not(.k-admin) .k-header .k-locale-toggle {
+    color: #223035;
+    background-image: none;
+    box-shadow: none;
+}
+
+body:not(.k-admin) .k-header .k-nav a:hover,
+body:not(.k-admin) .k-header .k-nav a[aria-current="page"] {
+    color: #85a6a6;
+    background-size: 0 0;
+    box-shadow: none;
+}
+
+body:not(.k-admin) .k-header-cta {
+    min-height: 2.7rem;
+    padding: 0 1.05rem;
+    border-radius: 999px;
+    background: #001111;
+    color: #fff;
+    box-shadow: none;
+}
+
+body:not(.k-admin) .k-header-cta:hover {
+    background: #85a6a6;
+    color: #fff;
+}
+
+body:not(.k-admin) .k-locale-menu {
+    background: #fff;
+    border: 1px solid #f0f2f2;
+    box-shadow: 0 16px 40px rgba(0, 17, 17, 0.08);
+}
+
+body:not(.k-admin) .k-locale-menu a {
+    color: #223035;
+}
+
+body:not(.k-admin) .k-locale-menu a:hover,
+body:not(.k-admin) .k-locale-menu a[aria-current="true"] {
+    background: #f5f5f5;
+    color: #001111;
+}
+
+body:not(.k-admin) .k-menu-toggle,
+body:not(.k-admin) .k-menu-icon,
+body:not(.k-admin) .k-menu-icon::before,
+body:not(.k-admin) .k-menu-icon::after {
+    color: #223035;
+    background: #223035;
+}
+
+body:not(.k-admin) .k-menu-toggle {
+    background: transparent;
+}
+
+@media (max-width: 959px) {
+    body:not(.k-admin) .k-panel,
+    body:not(.k-admin) .k-header.is-menu-open,
+    body:not(.k-admin) .k-header-overlay.is-menu-open {
+        background: #fff;
+        color: #223035;
+    }
+
+    body:not(.k-admin) .k-nav a {
+        color: #223035;
+        border-bottom-color: #f0f2f2;
+    }
+
+    body:not(.k-admin) .k-locale-menu {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+}
+
+body:not(.k-admin) .k-footer {
+    background: #001111;
+    border-top: 0;
+}
+
+body:not(.k-admin) .k-footer a:hover {
+    color: #c5d4d4;
+}
+
+.bx-shell {
+    width: min(74rem, calc(100% - 2rem));
+    margin-inline: auto;
+}
+
+.bx-kicker {
+    margin: 0 0 0.7rem;
+    color: #85a6a6;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.bx-reel {
+    padding: 1.15rem 0 0;
+}
+
+.bx-reel-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: min(68vh, 640px);
+    overflow: hidden;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at 50% 40%, rgba(133, 166, 166, 0.45), transparent 36%),
+        #001111;
+    color: #fff;
+}
+
+.bx-reel-stage img,
+.bx-reel .k-video-frame,
+.bx-reel .k-video-frame video,
+.bx-reel .k-video-frame iframe,
+.bx-reel .k-video-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+}
+
+.bx-reel .k-video-frame {
+    position: relative;
+    min-height: min(68vh, 640px);
+    aspect-ratio: auto;
+    border-radius: 28px;
+    overflow: hidden;
+}
+
+.bx-reel-stage.has-photo img {
+    opacity: 0.72;
+}
+
+.bx-reel-copy {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+    text-align: center;
+}
+
+.bx-reel-copy p {
+    margin: 0;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+}
+
+.bx-play {
+    width: 5.4rem;
+    height: 5.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(6px);
+}
+
+.bx-play::before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    margin: 2.05rem auto 0 2.2rem;
+    border-style: solid;
+    border-width: 0.55rem 0 0.55rem 0.9rem;
+    border-color: transparent transparent transparent #fff;
+}
+
+.bx-hero {
+    padding: 1.15rem 0 0.5rem;
+}
+
+.bx-hero-panel {
+    display: grid;
+    gap: 2rem;
+    align-items: end;
+    padding: clamp(1.8rem, 4vw, 3.6rem);
+    border-radius: 32px;
+    background:
+        radial-gradient(circle at 88% 18%, rgba(133, 166, 166, 0.38), transparent 26%),
+        #f3f5f5;
+}
+
+.bx-hero-copy {
+    display: grid;
+    align-content: end;
+    gap: 1.1rem;
+}
+
+.bx-hero h1 {
+    max-width: 11em;
+    margin: 0;
+    color: #223035;
+    font-size: clamp(2.7rem, 5.8vw, 5.35rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+}
+
+.bx-hero h1 em {
+    font-family: "Literata", serif;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+}
+
+:lang(fa) .bx-hero h1 em:not(.is-latin),
+:lang(ar) .bx-hero h1 em:not(.is-latin) {
+    font-family: "Vazirmatn", sans-serif;
+    font-style: normal;
+}
+
+.bx-lede,
+.bx-about .k-prose {
+    max-width: 34rem;
+    color: #5b696d;
+    font-size: 1.05rem;
+}
+
+.bx-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.4rem;
+    align-items: center;
+    margin-top: 0.4rem;
+}
+
+.bx-mark {
+    display: inline-grid;
+    color: #223035;
+    transition: transform 0.45s ease, color 0.45s ease;
+}
+
+.bx-mark:hover {
+    color: #85a6a6;
+    transform: rotate(-8deg);
+}
+
+.bx-textlink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #223035;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.bx-textlink svg {
+    transition: transform 0.35s ease;
+}
+
+.bx-textlink:hover {
+    color: #85a6a6;
+}
+
+.bx-textlink:hover svg {
+    transform: translateX(6px);
+}
+
+[dir="rtl"] .bx-textlink svg {
+    transform: scaleX(-1);
+}
+
+[dir="rtl"] .bx-textlink:hover svg {
+    transform: scaleX(-1) translateX(6px);
+}
+
+.bx-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    background: #001111;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.bx-pill:hover {
+    background: #85a6a6;
+    color: #fff;
+}
+
+.bx-hero-photo img,
+.bx-about-photo img,
+.bx-card img,
+.bx-feature img {
+    width: 100%;
+    border-radius: 24px;
+    object-fit: cover;
+}
+
+.bx-hero-photo img {
+    min-height: 22rem;
+    max-height: 34rem;
+    aspect-ratio: 4 / 5;
+}
+
+.bx-about,
+.bx-band {
+    padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+
+.bx-about-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+}
+
+.bx-about h2,
+.bx-band-head h1,
+.bx-band-head h2,
+.bx-close h2 {
+    margin: 0 0 0.8rem;
+    color: #223035;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.08;
+}
+
+.bx-marquee {
+    overflow: hidden;
+    margin-top: 1.5rem;
+    padding-block: 1rem;
+    border-block: 1px solid #f0f2f2;
+}
+
+.bx-marquee-track {
+    display: flex;
+    gap: 2.4rem;
+    width: max-content;
+    animation: bx-slide 36s linear infinite;
+}
+
+.bx-marquee span {
+    color: #223035;
+    font-family: "Inter Tight", "Vazirmatn", sans-serif;
+    font-size: clamp(1.45rem, 2.6vw, 2.4rem);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+:lang(fa) .bx-marquee span,
+:lang(ar) .bx-marquee span {
+    font-family: "Vazirmatn", sans-serif;
+}
+
+.bx-marquee span::before {
+    content: "";
+    display: inline-block;
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-inline-end: 2.4rem;
+    border-radius: 50%;
+    background: #85a6a6;
+    transform: translateY(-0.15rem);
+}
+
+.bx-band {
+    background: #f5f5f5;
+}
+
+.bx-cards {
+    display: grid;
+    gap: 1rem;
+}
+
+.bx-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-height: 13.5rem;
+    padding: 1.35rem 1.25rem 1.45rem;
+    border: 1px solid #f0f2f2;
+    border-radius: 24px;
+    background: #fff;
+    color: #223035;
+    text-decoration: none;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.bx-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bx-card-no {
+    color: #85a6a6;
+    font-family: "DM Sans", "Vazirmatn", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.bx-card-title {
+    font-family: "Inter Tight", "Vazirmatn", sans-serif;
+    font-size: clamp(1.25rem, 1.6vw, 1.55rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+}
+
+:lang(fa) .bx-card-title,
+:lang(ar) .bx-card-title {
+    font-family: "Vazirmatn", sans-serif;
+    letter-spacing: 0;
+}
+
+.bx-card-text {
+    color: #5b696d;
+    font-size: 0.98rem;
+}
+
+.bx-card-go {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: #f3f5f5;
+    color: #223035;
+    transition: transform 0.35s ease, background 0.35s ease, color 0.35s ease;
+}
+
+.bx-card:hover {
+    border-color: transparent;
+    box-shadow: 0 22px 46px rgba(0, 17, 17, 0.08);
+    transform: translateY(-8px);
+}
+
+.bx-card:hover .bx-card-go {
+    background: #85a6a6;
+    color: #fff;
+    transform: rotate(-45deg);
+}
+
+.bx-card img {
+    aspect-ratio: 16 / 10;
+    margin-bottom: 0.2rem;
+}
+
+.bx-feature {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.bx-feature img {
+    min-height: 18rem;
+    max-height: 28rem;
+    aspect-ratio: 16 / 8;
+}
+
+.bx-close {
+    padding: 1.25rem 0 2.5rem;
+    background: #fff;
+}
+
+.bx-close-panel {
+    padding: clamp(2.4rem, 6vw, 4.5rem);
+    border-radius: 32px;
+    background: #001111;
+    color: #fff;
+}
+
+.bx-close h2,
+.bx-close p {
+    color: #fff;
+}
+
+.bx-close p {
+    max-width: 34rem;
+    margin: 0 0 1.2rem;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.bx-close .bx-pill {
+    background: #fff;
+    color: #001111;
+}
+
+.bx-close .bx-pill:hover {
+    background: #85a6a6;
+    color: #fff;
+}
+
+@media (min-width: 800px) {
+    .bx-cards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .bx-hero-panel:has(.bx-hero-photo),
+    .bx-about-grid:has(.bx-about-photo) {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+}
+
+html.bx-motion .bx-rise {
+    opacity: 0;
+    transform: translateY(22px);
+}
+
+html.bx-motion .bx-rise.is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s ease, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--bx-d, 0ms);
+}
+
+html.bx-motion .bx-card.bx-rise.is-in:hover {
+    transform: translateY(-8px);
+}
+
+@keyframes bx-slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+[dir="rtl"] .bx-marquee-track {
+    animation-name: bx-slide-rtl;
+}
+
+@keyframes bx-slide-rtl {
+    from { transform: translateX(0); }
+    to { transform: translateX(50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bx-marquee-track,
+    .bx-card,
+    .bx-pill,
+    .bx-textlink svg,
+    .bx-mark {
+        animation: none;
+        transition: none;
+    }
+
+    .bx-marquee-track {
+        flex-wrap: wrap;
+        width: auto;
     }
 }

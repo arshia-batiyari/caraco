@@ -44,6 +44,11 @@
         @endif
     @endforeach
     <link rel="alternate" hreflang="x-default" href="{{ $alternates['fa'] ?? url('/fa') }}">
+    <script>
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches === false) {
+            document.documentElement.classList.add("bx-motion");
+        }
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
     <noscript>

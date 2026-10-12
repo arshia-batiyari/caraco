@@ -3,56 +3,59 @@
 @php
     $tourism = $divisions->firstWhere('key', 'tourism');
     $tourismImage = $tourism ? \App\Support\ImageStore::url($tourism->image_path) : null;
-    $rows = $tourismImage ? $divisions->reject(fn ($division) => $division->key === 'tourism') : $divisions;
 @endphp
 
-<section class="k-section k-index-section">
-    @if ($heading)
-        <div class="k-wrap">
-            <x-section-heading :title="$heading" :level="$level" />
-        </div>
-    @endif
-
-    @if ($tourism && $tourismImage)
-        @php
-            $translation = $tourism->publicTranslation();
-            $detailUrl = $tourism->publicUrl('divisions.show');
-            $plateUrl = $detailUrl ?: $tourism->externalUrl();
-        @endphp
-        <{{ $plateUrl ? 'a' : 'div' }} class="k-plate" @if ($plateUrl) href="{{ $plateUrl }}" @endif @if (! $detailUrl && $plateUrl) rel="noopener noreferrer" @endif>
-            <img src="{{ $tourismImage }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
-            <span class="k-plate-copy">
-                <span class="k-row-no">{{ sprintf('%02d', $tourism->position) }}</span>
-                <span class="k-row-title">{{ $translation->title }}</span>
-                @if (filled($translation->introduction))
-                    <span class="k-row-text">{{ $translation->introduction }}</span>
+<section class="bx-band">
+    <div class="bx-shell">
+        @if ($heading)
+            <div class="bx-band-head bx-rise">
+                @if ((int) $level === 1)
+                    <h1>{{ $heading }}</h1>
+                @else
+                    <h2>{{ $heading }}</h2>
                 @endif
-            </span>
-        </{{ $plateUrl ? 'a' : 'div' }}>
-    @endif
+            </div>
+        @endif
 
-    @if ($rows->isNotEmpty())
-        <div class="k-rows">
-            @foreach ($rows as $division)
+        @if ($tourism && $tourismImage)
+            @php
+                $translation = $tourism->publicTranslation();
+                $detailUrl = $tourism->publicUrl('divisions.show');
+                $plateUrl = $detailUrl ?: $tourism->externalUrl();
+            @endphp
+            <a class="bx-feature bx-rise" @if ($plateUrl) href="{{ $plateUrl }}" @endif @if (! $detailUrl && $plateUrl) rel="noopener noreferrer" @endif>
+                <img src="{{ $tourismImage }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
+                <span>
+                    <span class="bx-card-no">{{ sprintf('%02d', $tourism->position) }}</span>
+                    <span class="bx-card-title">{{ $translation->title }}</span>
+                </span>
+            </a>
+        @endif
+
+        <div class="bx-cards">
+            @foreach ($divisions as $division)
+                @continue($tourismImage && $division->key === 'tourism')
                 @php
                     $translation = $division->publicTranslation();
                     $detailUrl = $division->publicUrl('divisions.show');
+                    $image = \App\Support\ImageStore::url($division->image_path);
                 @endphp
-                <{{ $detailUrl ? 'a' : 'div' }} class="k-row" @if ($detailUrl) href="{{ $detailUrl }}" @endif>
-                    <span class="k-row-no">{{ sprintf('%02d', $division->position) }}</span>
-                    <span class="k-row-main">
-                        <span class="k-row-title">{{ $translation->title }}</span>
-                        @if (filled($translation->introduction))
-                            <span class="k-row-text">{{ $translation->introduction }}</span>
-                        @endif
+                <{{ $detailUrl ? 'a' : 'div' }} class="bx-card bx-rise" @if ($detailUrl) href="{{ $detailUrl }}" @endif style="--bx-d: {{ min($loop->index, 8) * 60 }}ms">
+                    @if ($image)
+                        <img src="{{ $image }}" alt="" loading="lazy" decoding="async">
+                    @endif
+                    <span class="bx-card-top">
+                        <span class="bx-card-no">{{ sprintf('%02d', $division->position) }}</span>
+                        <span class="bx-card-go" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>
+                        </span>
                     </span>
-                    <span class="k-row-go" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M5 12h14M13 6l6 6-6 6"></path>
-                        </svg>
-                    </span>
+                    <span class="bx-card-title">{{ $translation->title }}</span>
+                    @if (filled($translation->introduction))
+                        <span class="bx-card-text">{{ $translation->introduction }}</span>
+                    @endif
                 </{{ $detailUrl ? 'a' : 'div' }}>
             @endforeach
         </div>
-    @endif
+    </div>
 </section>

@@ -7,6 +7,8 @@
         "dev": "vite"
     },
     "devDependencies": {
+        "@fontsource/dm-sans": "^5.2.7",
+        "@fontsource/inter-tight": "^5.2.7",
         "@fontsource/literata": "^5.2.8",
         "@fontsource/manrope": "^5.2.8",
         "@fontsource/source-sans-3": "^5.2.8",

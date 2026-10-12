@@ -1,5 +1,5 @@
 import "./bootstrap";
 import "./navigation";
-import "./cursor";
+import "./reveal";
 import "./video";
 import "./admin-tabs";
