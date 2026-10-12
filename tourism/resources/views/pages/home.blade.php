@@ -75,8 +75,6 @@
         </div>
     </section>
 
-    <x-video-player :video="$video" />
-
     @if (filled($home?->intro_heading) || filled($home?->intro_body))
         <section class="k-section">
             <div class="k-wrap k-narrow">
