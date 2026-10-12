@@ -2786,3 +2786,23 @@ main {
         animation: none !important;
     }
 }
+
+.k-masthead-grid > img,
+.k-tour-card img,
+.k-editorial-card img,
+.k-attraction-cover img,
+.k-detail-image,
+.k-gallery-grid img {
+    border-radius: 1.15rem;
+}
+
+.k-masthead-grid > img {
+    aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 900px) {
+    .k-masthead-grid:has(> img) {
+        grid-template-columns: minmax(0, 1.05fr) minmax(16rem, 0.95fr);
+        align-items: center;
+    }
+}

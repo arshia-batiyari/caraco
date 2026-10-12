@@ -2,7 +2,7 @@
 
 @php
     $tourism = $divisions->firstWhere('key', 'tourism');
-    $tourismImage = $tourism ? \App\Support\ImageStore::url($tourism->image_path) : null;
+    $tourismImage = $tourism ? \App\Support\PreviewMedia::division($tourism->image_path, $tourism->key) : null;
 @endphp
 
 <section class="bx-band">
@@ -24,7 +24,7 @@
                 $plateUrl = $detailUrl ?: $tourism->externalUrl();
             @endphp
             <a class="bx-feature bx-rise" @if ($plateUrl) href="{{ $plateUrl }}" @endif @if (! $detailUrl && $plateUrl) rel="noopener noreferrer" @endif>
-                <img src="{{ $tourismImage }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
+                <img src="{{ $tourismImage }}" alt="" loading="lazy" decoding="async">
                 <span>
                     <span class="bx-card-no">{{ sprintf('%02d', $tourism->position) }}</span>
                     <span class="bx-card-title">{{ $translation->title }}</span>
@@ -38,7 +38,7 @@
                 @php
                     $translation = $division->publicTranslation();
                     $detailUrl = $division->publicUrl('divisions.show');
-                    $image = \App\Support\ImageStore::url($division->image_path);
+                    $image = \App\Support\PreviewMedia::division($division->image_path, $division->key);
                 @endphp
                 <{{ $detailUrl ? 'a' : 'div' }} class="bx-card bx-rise" @if ($detailUrl) href="{{ $detailUrl }}" @endif style="--bx-d: {{ min($loop->index, 8) * 60 }}ms">
                     @if ($image)

@@ -40,6 +40,8 @@
                         <img src="{{ \App\Support\ImageStore::url($image->path) }}" alt="{{ $translation->title }}" @if ($loop->first) fetchpriority="high" @else loading="lazy" @endif decoding="async">
                     @endforeach
                 </div>
+            @elseif ($cover = \App\Support\PreviewMedia::tour($tour))
+                <img class="k-detail-image" src="{{ $cover }}" alt="{{ $translation->title }}" fetchpriority="high" decoding="async">
             @endif
 
             @if (filled($translation->summary) || filled($translation->description))
@@ -145,12 +147,15 @@
                                     @endforeach
                                 </ul>
                             @endif
+                            @php $stayImage = \App\Support\PreviewMedia::hotel($stay->hotel); @endphp
                             @if ($stay->hotel->images->isNotEmpty())
                                 <div class="k-gallery-grid">
                                     @foreach ($stay->hotel->images as $image)
                                         <img src="{{ \App\Support\ImageStore::url($image->path) }}" alt="{{ $stay->hotel->publicTranslation()->name }}" loading="lazy" decoding="async">
                                     @endforeach
                                 </div>
+                            @elseif ($stayImage)
+                                <img class="k-detail-image" src="{{ $stayImage }}" alt="{{ $stay->hotel->publicTranslation()->name }}" loading="lazy" decoding="async">
                             @endif
                             @if (filled($stay->publicTranslation()?->arrangement))
                                 <p>{{ $stay->publicTranslation()->arrangement }}</p>

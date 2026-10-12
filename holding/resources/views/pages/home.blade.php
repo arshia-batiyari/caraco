@@ -13,17 +13,11 @@
     @if ($hasVideo)
         <x-video-player :video="$video" />
     @else
-        <section class="bx-reel" aria-label="{{ __('ui.video.title') }}">
+        <section class="bx-reel">
             <div class="bx-shell">
-                <div class="bx-reel-stage {{ $heroImage ? 'has-photo' : '' }}">
-                    @if ($heroImage)
-                        <img src="{{ $heroImage }}" alt="" decoding="async">
-                    @endif
-                    <div class="bx-reel-copy">
-                        <span class="bx-play" aria-hidden="true"></span>
-                        <p>{{ __('ui.video.title') }}</p>
-                    </div>
-                </div>
+                <figure class="bx-reel-stage has-photo">
+                    <img src="{{ $stageImage }}" alt="" fetchpriority="high" decoding="async">
+                </figure>
             </div>
         </section>
     @endif
@@ -65,7 +59,7 @@
             </div>
             @if ($heroImage)
                 <figure class="bx-hero-photo bx-rise">
-                    <img src="{{ $heroImage }}" alt="{{ $heroTitle !== '' ? $heroTitle : 'KARAKO' }}" fetchpriority="high" decoding="async">
+                    <img src="{{ $heroImage }}" alt="{{ $heroTitle !== '' ? $heroTitle : 'KARAKO' }}" decoding="async">
                 </figure>
             @endif
         </div>

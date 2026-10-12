@@ -14,6 +14,7 @@ use App\Models\MedicalStep;
 use App\Support\AlternateLinks;
 use App\Support\ContentPresenter;
 use App\Support\ImageStore;
+use App\Support\PreviewMedia;
 use App\Support\LocaleText;
 use App\Support\PublicCatalog;
 use App\Support\PublishedRecord;
@@ -126,13 +127,13 @@ class MedicalController extends Controller
         return $presenter->render('pages.medical.provider', [
             'record' => $record,
             'translation' => $translation,
-            'cover' => ImageStore::url($record->cover_path),
+            'cover' => PreviewMedia::provider($record),
             'crumbs' => $this->crumbs($translation->name, $url),
             'schema' => $presenter->breadcrumbs([
                 ['name' => __('ui.medical.title'), 'url' => route('medical.index')],
                 ['name' => $translation->name, 'url' => $url],
             ]),
-        ], $this->seo($presenter, $translation, 'name', $url, ImageStore::url($record->cover_path)), AlternateLinks::record($record, 'medical.providers.show', 'name'));
+        ], $this->seo($presenter, $translation, 'name', $url, PreviewMedia::provider($record)), AlternateLinks::record($record, 'medical.providers.show', 'name'));
     }
 
     public function doctor(ContentPresenter $presenter): View

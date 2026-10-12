@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Destination;
 use App\Support\ContentPresenter;
-use App\Support\ImageStore;
+use App\Support\PreviewMedia;
 use App\Support\PublicCatalog;
 use App\Support\SeoData;
 use Illuminate\View\View;
@@ -38,7 +38,7 @@ class DestinationController extends Controller
             'destination' => $destination,
             'translation' => $translation,
             'tours' => $tours,
-            'image' => ImageStore::url($destination->image_path),
+            'image' => PreviewMedia::destination($destination),
             'crumbs' => [
                 ['label' => __('ui.nav.home'), 'url' => route('home')],
                 ['label' => __('ui.nav.tours'), 'url' => route('tours.index')],
@@ -52,7 +52,7 @@ class DestinationController extends Controller
             title: $presenter->documentTitle($translation->meta_title, $translation->name),
             description: (string) ($translation->meta_description ?: $translation->summary ?: ''),
             canonical: $presenter->canonical($translation->canonical_url, $url),
-            image: ImageStore::url($destination->image_path),
+            image: PreviewMedia::destination($destination),
         ), $this->alternates($destination, $route, 'name'));
     }
 

@@ -95,8 +95,9 @@
                 <div class="k-editorial-rail">
                     @foreach ($destinations as $destination)
                         <a class="k-tour-card" href="{{ $destination->publicUrl('destinations.show') }}">
-                            @if ($destination->image_path)
-                                <img src="{{ \App\Support\ImageStore::url($destination->image_path) }}" alt="{{ $destination->publicTranslation()->name }}" loading="lazy" decoding="async">
+                            @php $destinationImage = \App\Support\PreviewMedia::destination($destination); @endphp
+                            @if ($destinationImage)
+                                <img src="{{ $destinationImage }}" alt="{{ $destination->publicTranslation()->name }}" loading="lazy" decoding="async">
                             @endif
                             <h3>{{ $destination->publicTranslation()->name }}</h3>
                         </a>
@@ -146,8 +147,9 @@
                 <div class="k-stay-list">
                     @foreach ($hotels as $hotel)
                         <article class="k-tour-card">
-                            @if ($hotel->images->first())
-                                <img src="{{ \App\Support\ImageStore::url($hotel->images->first()->path) }}" alt="{{ $hotel->publicTranslation()->name }}" loading="lazy" decoding="async">
+                            @php $hotelImage = \App\Support\PreviewMedia::hotel($hotel); @endphp
+                            @if ($hotelImage)
+                                <img src="{{ $hotelImage }}" alt="{{ $hotel->publicTranslation()->name }}" loading="lazy" decoding="async">
                             @endif
                             <h3>{{ $hotel->publicTranslation()->name }}</h3>
                             @if (filled($hotel->accommodation_category))
