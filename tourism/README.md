@@ -4,7 +4,7 @@ Laravel 12 application for the tourism subdomain. Architecture: [../docs/ARCHITE
 
 ```bash
 cp .env.example .env
-php artisan key:generate
+php artisan karako:prepare
 php artisan migrate
 npm install
 npm run build

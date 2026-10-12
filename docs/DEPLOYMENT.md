@@ -53,11 +53,24 @@ On a computer with PHP 8.2 and Composer 2:
 ```bash
 cd holding
 composer install --no-dev --optimize-autoloader
+php artisan karako:prepare
 ```
 
-Repeat in `tourism/`. Upload the resulting `vendor/` directory with the application. Do not run `composer update` on the server.
+Repeat in `tourism/`. `composer install` only builds `vendor/`. `karako:prepare` fills `APP_KEY` when `.env` has none, and creates `public/storage` as a relative link to `../storage/app/public`. Run it once in each application. A later run leaves an existing key untouched.
 
-If the panel provides Composer on PHP 8.2, you may run the same `composer install` there instead of uploading `vendor/`. `--no-dev` omits PHPUnit and the other development packages.
+Upload the resulting `vendor/` directory with the application. Do not run `composer update` on the server. `composer install` without `--no-dev` also works, and it adds PHPUnit and the other development packages to the zip. Prefer `--no-dev --optimize-autoloader`.
+
+Zip on the computer, then upload with the file manager. Include `vendor/` and `public/build`. Exclude `node_modules/` and `.git/`. Keep the server `.env` and `storage/app/` on later uploads; the first upload is the one that carries the generated key. Use a zip tool that stores symlinks (`zip -r -y` on Linux or macOS). The relative `public/storage` link then works on the host without a support ticket.
+
+If the zip tool drops the link, add one cron entry, let it run once, and delete it:
+
+```text
+php /home/account/apps/holding/artisan karako:prepare
+```
+
+Use the tourism path for the tourism app, and the panel’s PHP 8.2 binary if `php` is not 8.2. That creates the link on the server. It does not need a ticket.
+
+If the panel provides Composer on PHP 8.2, you may run the same `composer install` there instead of uploading `vendor/`.
 
 ## 3. Build the front-end assets
 
@@ -117,17 +130,19 @@ In the server `.env` set:
 KARAKO_PUBLIC_PATH=/home/account/public_html
 ```
 
-Use the tourism web root for the tourism app. This is an absolute path. `php artisan storage:link` and the Vite manifest then use that directory. Rebuild the config cache after changing it.
+Use the tourism web root for the tourism app. This is an absolute path. `php artisan karako:prepare` and the Vite manifest then use that directory. Rebuild the config cache after changing it.
 
 ## 5. Environment
 
-Copy `.env.example` to `.env` on the server. Generate a key once per application:
+Copy `.env.example` to `.env` on the computer you build from, or let `php artisan karako:prepare` copy it. Generate a key once per application:
 
 ```bash
-php artisan key:generate
+php artisan karako:prepare
 ```
 
-If there is no shell, generate the key on your computer with `php artisan key:generate --show` and paste the `base64:` value into the server `.env`. Use a different key for holding and tourism.
+That command writes `APP_KEY` only when the line is empty, and it also creates the storage link from the next section. Use a different key for holding and tourism. Do not run `key:generate --force` on an application that already has sessions or encrypted values.
+
+If there is no shell, run `php artisan karako:prepare` before you zip, and upload that `.env` with the first copy of the application. A one-off cron entry of the same command does the same job on the server.
 
 Production values that matter:
 
@@ -195,12 +210,14 @@ On a typical panel, `755` for directories and `644` for files is enough when PHP
 Published images go to `storage/app/public`. Create the public link:
 
 ```bash
-php artisan storage:link
+php artisan karako:prepare
 ```
+
+`karako:prepare` creates that link with a relative target, `../storage/app/public`, so the same link works after upload. Running it again does nothing when that link is already in place.
 
 ### When the host refuses symlinks
 
-`storage:link` prints an error and does not create `public/storage`. Use a real directory instead:
+`karako:prepare` prints an error and does not create `public/storage`. Use a real directory instead:
 
 1. Create a `storage` directory inside the web root (`public/storage`, or the copied web root’s `storage`).
 2. Make it writable by PHP.
@@ -276,7 +293,7 @@ Uploaded files and the database are a pair. Restoring one without the other leav
 ## 12. Updates
 
 1. Back up the database, `storage/app/`, and `.env`.
-2. On the build machine: `composer install --no-dev --optimize-autoloader` and `npm ci && npm run build`.
+2. On the build machine: `composer install --no-dev --optimize-autoloader`, `php artisan karako:prepare`, and `npm ci && npm run build`.
 3. Upload the new code, `vendor/`, and `public/build`, without overwriting the server `.env` or `storage/`.
 4. If you use the copied-public layout, copy `public/` into the web root again and re-apply the `index.php` path edits.
 5. `php artisan migrate --force`
@@ -311,7 +328,7 @@ Check `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` against the pan
 
 ### CSS, JavaScript, or images 404
 
-`public/build` was not uploaded, or the copied web root is missing `build/`. Run `npm run build` and upload it. Image URLs under `/storage/` need `php artisan storage:link` or `FILESYSTEM_PUBLIC_ROOT`. `APP_URL` must match the origin in the browser, including `https`, or asset URLs will point at the wrong host. Rebuild the config cache after changing `APP_URL`.
+`public/build` was not uploaded, or the copied web root is missing `build/`. Run `npm run build` and upload it. Image URLs under `/storage/` need `php artisan karako:prepare` (or a real `public/storage` directory plus `FILESYSTEM_PUBLIC_ROOT`). `APP_URL` must match the origin in the browser, including `https`, or asset URLs will point at the wrong host. Rebuild the config cache after changing `APP_URL`.
 
 ### Login works on HTTP and fails on HTTPS
 

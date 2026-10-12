@@ -130,7 +130,7 @@ Visual direction: charcoal and near-black surfaces, gold as an accent, ivory tex
 
 ## Images and video
 
-The `public` disk (`storage/app/public`) stores uploads. `php artisan storage:link` creates `public/storage`. On shared hosting where symlinks are disabled, copy or map that path in the panel, or serve files through an authenticated controller for private originals and a public copy for published images.
+The `public` disk (`storage/app/public`) stores uploads. `php artisan karako:prepare` creates `public/storage` as a relative link. On shared hosting where symlinks are disabled, copy or map that path in the panel, or serve files through an authenticated controller for private originals and a public copy for published images.
 
 Images: accept `jpg`, `png`, `webp`; limit size; store the original using the detected image type (`jpg`, `png`, `webp`, or `bin`); generate a display JPEG with GD. The visitor-supplied filename is not used as the stored extension. Do not add an image package until a phase needs it.
 
@@ -154,10 +154,9 @@ Deploy steps:
 1. `composer install --no-dev --optimize-autoloader` on PHP 8.2.
 2. `npm ci && npm run build` before upload.
 3. Upload the app, including `vendor/` and `public/build`, if the host has no Composer or Node.
-4. Set `.env` (`APP_ENV=production`, `APP_DEBUG=false`, unique `APP_KEY`, MySQL credentials).
+4. Copy `.env.example` to `.env` and run `php artisan karako:prepare`. It writes `APP_KEY` when the line is empty and creates the relative storage link. Then set `APP_ENV=production`, `APP_DEBUG=false`, and the MySQL credentials.
 5. `php artisan migrate --force`
-6. `php artisan storage:link`
-7. Point the domain at `public/`.
+6. Point the domain at `public/`.
 
 Runtime choices for a host without root, Redis, or Supervisor:
 

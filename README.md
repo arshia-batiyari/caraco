@@ -65,7 +65,7 @@ Each app has its own `.env`, created from its `.env.example`. Values that must d
 
 Production additionally sets `APP_ENV=production` and `APP_DEBUG=false`. When `APP_URL` starts with `https://`, generated links and the session cookie use HTTPS.
 
-`KARAKO_PUBLIC_PATH` and `FILESYSTEM_PUBLIC_ROOT` stay empty when the domain points at `public/` and `php artisan storage:link` works. The deployment guide explains when to set them.
+`KARAKO_PUBLIC_PATH` and `FILESYSTEM_PUBLIC_ROOT` stay empty when the domain points at `public/` and `php artisan karako:prepare` has created the storage link. The deployment guide explains when to set them.
 
 ## Migrations, seeders, and the first administrator
 

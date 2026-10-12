@@ -21,10 +21,9 @@ Run these in `holding/`, with PHP 8.2:
 ```bash
 composer install --no-dev --optimize-autoloader
 npm ci && npm run build
-php artisan key:generate
+php artisan karako:prepare
 php artisan migrate --force
 php artisan db:seed --force
-php artisan storage:link
 php artisan karako:admin you@example.com
 php artisan config:cache
 php artisan route:cache
@@ -33,7 +32,7 @@ php artisan view:cache
 
 `db:seed` writes the nine division titles and the default navigation in Persian, English, Russian, and Arabic. Descriptions are left empty for editors. The seed does not create a password or an administrator. The `karako:admin` command prints a generated password once. Keep it out of git and out of this file.
 
-If `storage:link` fails because the host disables symlinks, set `FILESYSTEM_PUBLIC_ROOT` as described in the shared guide.
+`karako:prepare` writes `APP_KEY` when it is empty and creates the relative `public/storage` link. If the host disables symlinks, set `FILESYSTEM_PUBLIC_ROOT` as described in the shared guide.
 
 If the panel cannot point the domain at `public/`, copy only those public files into the web root, point `index.php` at this application, and set `KARAKO_PUBLIC_PATH` to that web root.
 
