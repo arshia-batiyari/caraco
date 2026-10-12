@@ -31,7 +31,7 @@ php artisan view:cache
 
 Do not run `db:seed` for content. The tourism seeder does not insert tours, prices, clinics, or accounts. Create the administrator with `karako:admin`, then enter records at `/admin`. The command prints a generated password once. Keep it out of git and out of this file.
 
-`karako:prepare` writes `APP_KEY` when it is empty and creates the relative `public/storage` link. If the host disables symlinks, set `FILESYSTEM_PUBLIC_ROOT` as described in the shared guide.
+`karako:prepare` writes `APP_KEY` when it is empty and creates the relative `public/storage` link. The same two commands run in the browser at `/setup` after upload. If the host disables symlinks, set `FILESYSTEM_PUBLIC_ROOT` as described in the shared guide.
 
 If the panel cannot point the domain at `public/`, copy only those public files into the web root, point `index.php` at this application, and set `KARAKO_PUBLIC_PATH` to that web root.
 

@@ -109,6 +109,7 @@ class SeoController extends Controller
         $lines = [
             'User-agent: *',
             'Disallow: /admin',
+            'Disallow: /setup',
             'Sitemap: '.rtrim((string) config('app.url'), '/').'/sitemap.xml',
         ];
 

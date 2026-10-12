@@ -142,7 +142,7 @@ php artisan karako:prepare
 
 That command writes `APP_KEY` only when the line is empty, and it also creates the storage link from the next section. Use a different key for holding and tourism. Do not run `key:generate --force` on an application that already has sessions or encrypted values.
 
-If there is no shell, run `php artisan karako:prepare` before you zip, and upload that `.env` with the first copy of the application. A one-off cron entry of the same command does the same job on the server.
+After the files are on the host, open `/setup` once in the browser. On the holding domain that is `https://example.com/setup`, and on the tourism domain it is the same path. The page runs `key:generate` and then `storage:link`. When `APP_KEY` is already filled, the page leaves the key and still creates the storage link. Do the same on the other domain.
 
 Production values that matter:
 
