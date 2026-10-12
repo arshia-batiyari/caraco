@@ -5,6 +5,7 @@ namespace App\View;
 use App\Models\Setting;
 use App\Support\LocaleUrl;
 use App\Support\SeoData;
+use Illuminate\Database\QueryException;
 use Illuminate\View\View;
 
 class SiteComposer
@@ -18,6 +19,17 @@ class SiteComposer
                 $alternates[$code] = LocaleUrl::forLocale($code);
             }
             request()->attributes->set('alternates', $alternates);
+        }
+
+        $contactEmail = null;
+        $contactPhone = null;
+        try {
+            $contactEmail = Setting::getValue('contact_email');
+            $contactPhone = Setting::getValue('contact_phone');
+        } catch (QueryException $exception) {
+            if (! $this->missingTable($exception)) {
+                throw $exception;
+            }
         }
 
         $named = request()->route()?->getName();
@@ -35,8 +47,8 @@ class SiteComposer
                 ['url' => route('feedback.index'), 'label' => __('ui.nav.feedback'), 'active' => request()->routeIs('feedback.*'), 'external' => false],
                 ['url' => route('consultation'), 'label' => __('ui.nav.consultation'), 'active' => request()->routeIs('consultation'), 'external' => false],
             ],
-            'contactEmail' => Setting::getValue('contact_email'),
-            'contactPhone' => Setting::getValue('contact_phone'),
+            'contactEmail' => $contactEmail,
+            'contactPhone' => $contactPhone,
             'relatedUrl' => config('karako.related_url') ?: null,
             'relatedLabel' => __('ui.related.holding'),
             'alternates' => $alternates,
@@ -47,6 +59,13 @@ class SiteComposer
                 robots: $noindex ? 'noindex, follow' : 'index, follow',
             ),
         ]);
+    }
+
+    private function missingTable(QueryException $exception): bool
+    {
+        $state = (string) ($exception->errorInfo[0] ?? '');
+
+        return $state === '42S02' || str_contains($exception->getMessage(), 'no such table');
     }
 
     private function fallbackTitle(?string $named): string

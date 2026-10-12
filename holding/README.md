@@ -15,7 +15,7 @@ Set `APP_URL`, `TOURISM_URL`, and the MySQL `DB_*` values for this app only. The
 
 ```bash
 php artisan migrate
-php artisan storage:link
+php artisan karako:prepare
 php artisan karako:admin you@example.com
 ```
 
