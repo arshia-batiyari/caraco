@@ -24,8 +24,8 @@ if (!coarsePointer && openLabel) {
     };
 
     const follow = () => {
-        currentX += (targetX - currentX) * 0.22;
-        currentY += (targetY - currentY) * 0.22;
+        currentX += (targetX - currentX) * 0.16;
+        currentY += (targetY - currentY) * 0.16;
         place();
         if (Math.abs(targetX - currentX) > 0.4 || Math.abs(targetY - currentY) > 0.4) {
             frame = window.requestAnimationFrame(follow);
@@ -64,10 +64,10 @@ if (!coarsePointer && openLabel) {
         element.dataset.cursor = text;
     };
 
-    document.querySelectorAll(".k-brand, .k-nav a, .k-header-cta, .k-btn, .k-footer a, .k-more a, .k-locale-toggle").forEach((element) => {
+    document.querySelectorAll(".k-brand, .k-nav a, .k-header-cta, .k-btn, .k-footer a, .k-more a, .k-locale-toggle, .k-next-link").forEach((element) => {
         name(element, openLabel);
     });
-    document.querySelectorAll(".k-index-link, .k-portfolio-item, .k-feature a").forEach((element) => {
+    document.querySelectorAll(".k-row, .k-plate, .k-index-link, .k-portfolio-item, .k-feature a").forEach((element) => {
         name(element, viewLabel);
     });
     document.querySelectorAll(".k-locale-menu a").forEach((element) => {
@@ -89,7 +89,7 @@ if (!coarsePointer && openLabel) {
 
     if (!reduceMotion) {
         const clamp = (value, limit) => Math.max(-limit, Math.min(limit, value));
-        document.querySelectorAll(".k-header-cta, .k-hero .k-btn, .k-cta .k-btn").forEach((element) => {
+        document.querySelectorAll(".k-header-cta, .k-stage .k-btn, .k-hero .k-btn").forEach((element) => {
             element.addEventListener("mousemove", (event) => {
                 const box = element.getBoundingClientRect();
                 const dx = clamp((event.clientX - (box.left + box.width / 2)) * 0.28, 12);
@@ -98,6 +98,22 @@ if (!coarsePointer && openLabel) {
             });
             element.addEventListener("mouseleave", () => {
                 element.style.transform = "";
+            });
+        });
+
+        document.querySelectorAll(".k-next").forEach((element) => {
+            const arrow = element.querySelector(".k-next-arrow");
+            if (!arrow) {
+                return;
+            }
+            element.addEventListener("mousemove", (event) => {
+                const box = element.getBoundingClientRect();
+                const dx = clamp(((event.clientX - box.left) / box.width - 0.5) * 72, 36);
+                const dy = clamp(((event.clientY - box.top) / box.height - 0.5) * 48, 22);
+                arrow.style.transform = `translate(${dx}px, ${dy}px)`;
+            });
+            element.addEventListener("mouseleave", () => {
+                arrow.style.transform = "";
             });
         });
     }

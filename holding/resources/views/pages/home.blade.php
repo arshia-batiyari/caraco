@@ -3,12 +3,14 @@
 @section('content')
     @if (filled($home?->hero_title))
         <x-hero
+            class="k-stage"
             variant="editorial"
             :eyebrow="$home->hero_eyebrow"
             :title="$home->hero_title"
             :lede="$home->hero_lede"
             :image-url="$heroImage"
             :image-alt="$home->hero_title"
+            :lang="$home->locale"
         >
             <x-slot:actions>
                 @if ($divisions->isNotEmpty())
@@ -18,7 +20,7 @@
             </x-slot:actions>
         </x-hero>
     @else
-        <section class="k-masthead">
+        <section class="k-masthead k-stage k-stage-mark">
             <div class="k-wrap k-masthead-grid">
                 <div>
                     @if (filled($home?->hero_eyebrow))
@@ -45,18 +47,21 @@
     <x-video-player :video="$video" />
 
     @if (filled($home?->intro_heading) || filled($home?->intro_body) || $introImage)
-        <section class="k-section k-intro">
-            <div class="k-wrap {{ $introImage && (filled($home?->intro_heading) || filled($home?->intro_body)) ? 'k-split' : '' }}">
+        <section class="k-section k-challenge">
+            <div class="k-challenge-grid">
+                <p class="k-challenge-no">01</p>
                 <div>
                     @if (filled($home?->intro_heading))
                         <x-section-heading :title="$home->intro_heading" />
                     @endif
                     <x-prose-body :body="$home->intro_body ?? null" />
                 </div>
-                @if ($introImage)
-                    <img class="k-intro-image" src="{{ $introImage }}" alt="{{ filled($home?->intro_heading) ? $home->intro_heading : '' }}" loading="lazy" decoding="async">
-                @endif
             </div>
+            @if ($introImage)
+                <figure class="k-challenge-media">
+                    <img src="{{ $introImage }}" alt="{{ filled($home?->intro_heading) ? $home->intro_heading : '' }}" loading="lazy" decoding="async">
+                </figure>
+            @endif
         </section>
     @endif
 
@@ -65,7 +70,7 @@
     @endif
 
     @if ($projects->isNotEmpty())
-        <section class="k-section k-projects">
+        <section class="k-section k-projects k-reel">
             <div class="k-wrap">
                 <x-section-heading :title="filled($home?->projects_heading) ? $home->projects_heading : __('ui.nav.projects')" />
                 <div class="k-portfolio">

@@ -1,64 +1,58 @@
-@props(['divisions', 'heading' => null])
+@props(['divisions', 'heading' => null, 'level' => 2])
 
 @php
     $tourism = $divisions->firstWhere('key', 'tourism');
-    $rest = $divisions->reject(fn ($division) => $division->key === 'tourism');
+    $tourismImage = $tourism ? \App\Support\ImageStore::url($tourism->image_path) : null;
+    $rows = $tourismImage ? $divisions->reject(fn ($division) => $division->key === 'tourism') : $divisions;
 @endphp
 
-<section class="k-section">
-    <div class="k-wrap">
-        @if ($heading)
-            <x-section-heading :title="$heading" />
-        @endif
+<section class="k-section k-index-section">
+    @if ($heading)
+        <div class="k-wrap">
+            <x-section-heading :title="$heading" :level="$level" />
+        </div>
+    @endif
 
-        @if ($tourism)
-            @php
-                $translation = $tourism->publicTranslation();
-                $detailUrl = $tourism->publicUrl('divisions.show');
-                $external = $tourism->externalUrl();
-                $image = \App\Support\ImageStore::url($tourism->image_path);
-            @endphp
-            <article class="k-feature k-feature-tourism">
-                <div class="k-feature-copy">
-                    <p class="k-index-no">{{ sprintf('%02d', $tourism->position) }}</p>
-                    <h3 class="k-index-title">
-                        @if ($detailUrl)
-                            <a href="{{ $detailUrl }}">{{ $translation->title }}</a>
-                        @else
-                            {{ $translation->title }}
-                        @endif
-                    </h3>
-                    @if (filled($translation->introduction))
-                        <p>{{ $translation->introduction }}</p>
-                    @endif
-                    @if ($external)
-                        <div class="k-actions">
-                            <a class="k-btn k-btn-gold" href="{{ $external }}" rel="noopener noreferrer">{{ __('ui.related.tourism') }}</a>
-                        </div>
-                    @endif
-                </div>
-                @if ($image)
-                    <img src="{{ $image }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
+    @if ($tourism && $tourismImage)
+        @php
+            $translation = $tourism->publicTranslation();
+            $detailUrl = $tourism->publicUrl('divisions.show');
+            $plateUrl = $detailUrl ?: $tourism->externalUrl();
+        @endphp
+        <{{ $plateUrl ? 'a' : 'div' }} class="k-plate" @if ($plateUrl) href="{{ $plateUrl }}" @endif @if (! $detailUrl && $plateUrl) rel="noopener noreferrer" @endif>
+            <img src="{{ $tourismImage }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
+            <span class="k-plate-copy">
+                <span class="k-row-no">{{ sprintf('%02d', $tourism->position) }}</span>
+                <span class="k-row-title">{{ $translation->title }}</span>
+                @if (filled($translation->introduction))
+                    <span class="k-row-text">{{ $translation->introduction }}</span>
                 @endif
-            </article>
-        @endif
+            </span>
+        </{{ $plateUrl ? 'a' : 'div' }}>
+    @endif
 
-        @if ($rest->isNotEmpty())
-            <div class="k-index">
-                @foreach ($rest as $division)
-                    @php
-                        $translation = $division->publicTranslation();
-                        $detailUrl = $division->publicUrl('divisions.show');
-                    @endphp
-                    <a class="k-index-link" href="{{ $detailUrl }}">
-                        <span class="k-index-no">{{ sprintf('%02d', $division->position) }}</span>
-                        <span class="k-index-title">{{ $translation->title }}</span>
+    @if ($rows->isNotEmpty())
+        <div class="k-rows">
+            @foreach ($rows as $division)
+                @php
+                    $translation = $division->publicTranslation();
+                    $detailUrl = $division->publicUrl('divisions.show');
+                @endphp
+                <{{ $detailUrl ? 'a' : 'div' }} class="k-row" @if ($detailUrl) href="{{ $detailUrl }}" @endif>
+                    <span class="k-row-no">{{ sprintf('%02d', $division->position) }}</span>
+                    <span class="k-row-main">
+                        <span class="k-row-title">{{ $translation->title }}</span>
                         @if (filled($translation->introduction))
-                            <span class="k-index-text">{{ $translation->introduction }}</span>
+                            <span class="k-row-text">{{ $translation->introduction }}</span>
                         @endif
-                    </a>
-                @endforeach
-            </div>
-        @endif
-    </div>
+                    </span>
+                    <span class="k-row-go" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M5 12h14M13 6l6 6-6 6"></path>
+                        </svg>
+                    </span>
+                </{{ $detailUrl ? 'a' : 'div' }}>
+            @endforeach
+        </div>
+    @endif
 </section>
