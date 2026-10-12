@@ -1,7 +1,9 @@
 @php
     $label = $record->publicTranslation();
     $url = $record->publicUrl($route);
-    $image = \App\Support\ImageStore::url($record->cover_path ?? null);
+    $image = $record instanceof \App\Models\MedicalProvider
+        ? \App\Support\PreviewMedia::provider($record)
+        : \App\Support\ImageStore::url($record->cover_path ?? null);
 @endphp
 @if ($label && $url)
     <article class="k-editorial-card">

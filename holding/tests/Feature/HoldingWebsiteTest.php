@@ -34,6 +34,8 @@ class HoldingWebsiteTest extends TestCase
                 'Social activities and charitable initiatives',
             ])
             ->assertSee('https://travel.example', false)
+            ->assertSee('media/preview/division-tourism.jpg', false)
+            ->assertSee('media/preview/division-construction.jpg', false)
             ->assertSee('href="'.route('divisions.show', ['locale' => 'en', 'slug' => 'tourism']).'"', false);
 
         $this->get('/fa')
@@ -256,7 +258,10 @@ class HoldingWebsiteTest extends TestCase
             ->assertOk()
             ->assertSee('A diversified holding')
             ->assertSee('A short introduction.')
-            ->assertSee('Only this entered text.');
+            ->assertSee('Only this entered text.')
+            ->assertSee($path, false)
+            ->assertDontSee('hero-holding.jpg', false)
+            ->assertSee('stage-holding.jpg', false);
     }
 
     public function test_guests_and_editors_are_kept_out_of_user_management(): void

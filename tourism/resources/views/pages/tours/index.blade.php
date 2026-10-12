@@ -3,7 +3,7 @@
 @section('content')
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
     <x-breadcrumbs :items="$crumbs" />
-    <section class="k-section">
+    <section class="k-section k-catalog">
         <div class="k-wrap">
             <x-section-heading :title="__('ui.tours.index_title')" :intro="__('ui.tours.index_description')" />
             <div class="k-listing">

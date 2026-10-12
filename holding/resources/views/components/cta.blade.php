@@ -1,16 +1,14 @@
 @props(['eyebrow' => null, 'title', 'text' => null, 'href', 'label'])
 
-<section class="k-cta">
-    <div class="k-wrap">
+<section class="bx-close">
+    <div class="bx-shell bx-close-panel bx-rise">
         @if ($eyebrow)
-            <p class="k-eyebrow">{{ $eyebrow }}</p>
+            <p class="bx-kicker">{{ $eyebrow }}</p>
         @endif
         <h2>{{ $title }}</h2>
         @if ($text)
-            <p class="k-lede">{{ $text }}</p>
+            <p>{{ $text }}</p>
         @endif
-        <div class="k-actions">
-            <a class="k-btn k-btn-gold" href="{{ $href }}">{{ $label }}</a>
-        </div>
+        <a class="bx-pill" href="{{ $href }}">{{ $label }}</a>
     </div>
 </section>

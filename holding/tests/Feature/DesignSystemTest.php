@@ -20,6 +20,9 @@ class DesignSystemTest extends TestCase
             ->assertDontSee('نُه زمینهٔ کار، با یک معیار.')
             ->assertDontSee('fonts.bunny.net')
             ->assertDontSee('fonts.googleapis.com')
+            ->assertSee('media/preview/stage-holding.jpg', false)
+            ->assertSee('media/preview/hero-holding.jpg', false)
+            ->assertDontSee('bx-play', false)
             ->assertDontSee('<video', false)
             ->assertDontSee('<iframe', false);
     }

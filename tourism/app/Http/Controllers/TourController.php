@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Faq;
 use App\Models\Tour;
 use App\Support\ContentPresenter;
-use App\Support\ImageStore;
+use App\Support\PreviewMedia;
 use App\Support\PublicCatalog;
 use App\Support\RouteMap;
 use App\Support\SeoData;
@@ -119,7 +119,7 @@ class TourController extends Controller
         if (filled($translation->summary) || filled($translation->description)) {
             $schema['description'] = (string) ($translation->summary ?: $translation->description);
         }
-        $image = ImageStore::url($tour->cover_path);
+        $image = PreviewMedia::tour($tour);
         if ($image) {
             $schema['image'] = $image;
         }

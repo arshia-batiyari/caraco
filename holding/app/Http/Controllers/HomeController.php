@@ -6,6 +6,7 @@ use App\Models\ProfileTranslation;
 use App\Models\Setting;
 use App\Support\ContentPresenter;
 use App\Support\ImageStore;
+use App\Support\PreviewMedia;
 use App\Support\PublicContent;
 use App\Support\SeoData;
 use App\Support\SiteContext;
@@ -23,14 +24,15 @@ class HomeController extends Controller
             'divisions' => $content->divisions(),
             'projects' => $content->projects()->take(3),
             'video' => $content->video(),
-            'heroImage' => ImageStore::url(Setting::getValue('hero_image')),
+            'stageImage' => PreviewMedia::stage(),
+            'heroImage' => PreviewMedia::hero(Setting::getValue('hero_image')),
             'introImage' => ImageStore::url(Setting::getValue('intro_image')),
             'schema' => $this->schema($site),
         ], new SeoData(
             title: $presenter->documentTitle($home?->meta_title, filled($home?->hero_title) ? (string) $home->hero_title : 'KARAKO'),
             description: (string) ($home?->meta_description ?: $home?->hero_lede ?: ''),
             canonical: $presenter->canonical($home?->canonical_url, route('home', ['locale' => $canonicalLocale])),
-            image: ImageStore::url(Setting::getValue('og_image')) ?: ImageStore::url(Setting::getValue('hero_image')),
+            image: ImageStore::url(Setting::getValue('og_image')) ?: PreviewMedia::hero(Setting::getValue('hero_image')),
         ));
     }
 

@@ -4,6 +4,7 @@
 
 @section('content')
     <h1>{{ __('admin.dashboard') }}</h1>
+    <p class="k-admin-lead">{{ __('admin.dashboard_lead') }}</p>
     <ul class="k-admin-stats">
         <li>
             <a href="{{ route('admin.tours.index', ['published' => 1]) }}">

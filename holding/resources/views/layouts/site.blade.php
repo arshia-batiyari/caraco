@@ -44,6 +44,11 @@
         @endif
     @endforeach
     <link rel="alternate" hreflang="x-default" href="{{ $alternates['fa'] ?? url('/fa') }}">
+    <script>
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches === false) {
+            document.documentElement.classList.add("bx-motion");
+        }
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
     <noscript>
@@ -51,31 +56,19 @@
             @media (max-width: 959px) {
                 .k-panel { position: static !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
             }
+            .k-locale-menu { display: block !important; position: static !important; }
         </style>
     </noscript>
 </head>
-<body>
+<body data-cursor-open="{{ __('ui.cursor.open') }}" data-cursor-view="{{ __('ui.cursor.view') }}" data-cursor-play="{{ __('ui.cursor.play') }}">
     <a class="k-skip" href="#content">{{ __('ui.skip') }}</a>
     <header class="k-header {{ trim($__env->yieldContent('header_tone')) }}" data-nav>
         <div class="k-header-bar k-wrap-wide">
             <x-brand-mark />
-            <div class="k-header-tools">
-                <a class="k-btn k-btn-gold k-header-cta k-header-cta-bar" href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
-                <button
-                    type="button"
-                    class="k-menu-toggle"
-                    data-menu-toggle
-                    aria-expanded="false"
-                    aria-controls="primary-menu"
-                >
-                    <span class="k-menu-icon" aria-hidden="true"></span>
-                    <span class="k-sr">{{ __('ui.menu') }}</span>
-                </button>
-            </div>
             <div class="k-panel" id="primary-menu" data-menu-panel>
-                <a class="k-btn k-btn-gold k-header-cta k-header-cta-panel" href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
                 <nav class="k-nav" aria-label="{{ __('ui.primary_nav') }}">
                     @foreach ($navLinks as $link)
+                        @continue($link['url'] === route('contact'))
                         <a
                             href="{{ $link['url'] }}"
                             @if ($link['active']) aria-current="page" @endif
@@ -83,8 +76,21 @@
                         >{{ $link['label'] }}</a>
                     @endforeach
                 </nav>
-                <x-language-switcher />
+                <div class="k-header-end">
+                    <x-language-switcher />
+                    <a class="k-header-cta" href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
+                </div>
             </div>
+            <button
+                type="button"
+                class="k-menu-toggle"
+                data-menu-toggle
+                aria-expanded="false"
+                aria-controls="primary-menu"
+            >
+                <span class="k-menu-icon" aria-hidden="true"></span>
+                <span class="k-sr">{{ __('ui.menu') }}</span>
+            </button>
         </div>
     </header>
 

@@ -1,100 +1,133 @@
 @extends('layouts.site')
 
 @section('content')
-    @if (filled($home?->hero_title))
-        <x-hero
-            variant="editorial"
-            :eyebrow="$home->hero_eyebrow"
-            :title="$home->hero_title"
-            :lede="$home->hero_lede"
-            :image-url="$heroImage"
-            :image-alt="$home->hero_title"
-        >
-            <x-slot:actions>
-                @if ($divisions->isNotEmpty())
-                    <a class="k-btn k-btn-ink" href="{{ route('divisions.index') }}">{{ __('ui.nav.divisions') }}</a>
-                @endif
-                <a class="k-btn k-btn-line" href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
-            </x-slot:actions>
-        </x-hero>
+    @php
+        $heroTitle = filled($home?->hero_title) ? trim((string) $home->hero_title) : '';
+        $heroWords = $heroTitle !== '' ? (preg_split('/\s+/u', $heroTitle) ?: []) : [];
+        $heroAccent = $heroWords !== [] ? array_pop($heroWords) : null;
+        $heroLead = implode(' ', $heroWords);
+        $heroAccentLatin = $heroAccent !== null && preg_match('/\p{Arabic}/u', $heroAccent) !== 1;
+        $hasVideo = is_array($video) && filled($video['src'] ?? null);
+    @endphp
+
+    @if ($hasVideo)
+        <x-video-player :video="$video" />
     @else
-        <section class="k-masthead">
-            <div class="k-wrap k-masthead-grid">
-                <div>
-                    @if (filled($home?->hero_eyebrow))
-                        <p class="k-eyebrow">{{ $home->hero_eyebrow }}</p>
-                    @endif
-                    <h1 class="k-wordmark"><x-logo size="masthead" /></h1>
-                    @if (filled($home?->hero_lede))
-                        <p class="k-lede">{{ $home->hero_lede }}</p>
-                    @endif
-                    <div class="k-actions">
-                        @if ($divisions->isNotEmpty())
-                            <a class="k-btn k-btn-gold" href="{{ route('divisions.index') }}">{{ __('ui.nav.divisions') }}</a>
-                        @endif
-                        <a class="k-btn k-btn-line" href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
-                    </div>
-                </div>
-                @if ($heroImage)
-                    <img src="{{ $heroImage }}" alt="{{ filled($home?->hero_lede) ? $home->hero_lede : 'KARAKO' }}" fetchpriority="high" decoding="async">
-                @endif
+        <section class="bx-reel">
+            <div class="bx-shell">
+                <figure class="bx-reel-stage has-photo">
+                    <img src="{{ $stageImage }}" alt="" fetchpriority="high" decoding="async">
+                </figure>
             </div>
         </section>
     @endif
 
-    <x-video-player :video="$video" />
+    <section class="bx-hero">
+        <div class="bx-shell bx-hero-panel">
+            <div class="bx-hero-copy bx-rise">
+                @if (filled($home?->hero_eyebrow))
+                    <p class="bx-kicker">{{ $home->hero_eyebrow }}</p>
+                @endif
+                @if ($heroTitle !== '')
+                    <h1>
+                        @if ($heroLead !== '')
+                            {{ $heroLead }}
+                        @endif
+                        <em @class(['is-latin' => $heroAccentLatin])>{{ $heroAccent }}</em>
+                    </h1>
+                @else
+                    <h1 class="bx-logo-title"><x-logo size="masthead" /></h1>
+                @endif
+                @if (filled($home?->hero_lede))
+                    <p class="bx-lede">{{ $home->hero_lede }}</p>
+                @endif
+                <div class="bx-hero-actions">
+                    @if ($divisions->isNotEmpty())
+                        <a class="bx-mark" href="{{ route('divisions.index') }}" aria-label="{{ __('ui.nav.divisions') }}">
+                            <svg viewBox="0 0 64 64" width="72" height="72" aria-hidden="true">
+                                <rect x="2.5" y="2.5" width="59" height="59" rx="18" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
+                                <path d="M26 40 40 26M30 26h10v10" fill="none" stroke="currentColor" stroke-width="1.4"></path>
+                            </svg>
+                        </a>
+                        <a class="bx-textlink" href="{{ route('divisions.index') }}">
+                            {{ __('ui.nav.divisions') }}
+                            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>
+                        </a>
+                    @endif
+                    <a class="bx-pill" href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
+                </div>
+            </div>
+            @if ($heroImage)
+                <figure class="bx-hero-photo bx-rise">
+                    <img src="{{ $heroImage }}" alt="{{ $heroTitle !== '' ? $heroTitle : 'KARAKO' }}" decoding="async">
+                </figure>
+            @endif
+        </div>
+    </section>
 
     @if (filled($home?->intro_heading) || filled($home?->intro_body) || $introImage)
-        <section class="k-section">
-            <div class="k-wrap {{ $introImage && (filled($home?->intro_heading) || filled($home?->intro_body)) ? 'k-split' : '' }}">
-                <div>
+        <section class="bx-about">
+            <div class="bx-shell bx-about-grid">
+                @if ($introImage)
+                    <figure class="bx-about-photo bx-rise">
+                        <img src="{{ $introImage }}" alt="{{ filled($home?->intro_heading) ? $home->intro_heading : '' }}" loading="lazy" decoding="async">
+                    </figure>
+                @endif
+                <div class="bx-rise">
                     @if (filled($home?->intro_heading))
-                        <x-section-heading :title="$home->intro_heading" />
+                        <h2>{{ $home->intro_heading }}</h2>
                     @endif
                     <x-prose-body :body="$home->intro_body ?? null" />
                 </div>
-                @if ($introImage)
-                    <img class="k-intro-image" src="{{ $introImage }}" alt="{{ filled($home?->intro_heading) ? $home->intro_heading : '' }}" loading="lazy" decoding="async">
-                @endif
             </div>
         </section>
     @endif
 
     @if ($divisions->isNotEmpty())
+        <div class="bx-marquee" aria-hidden="true">
+            <div class="bx-marquee-track">
+                @foreach ([1, 2] as $copy)
+                    @foreach ($divisions as $division)
+                        <span>{{ $division->publicTranslation()->title }}</span>
+                    @endforeach
+                @endforeach
+            </div>
+        </div>
         <x-division-list :divisions="$divisions" :heading="filled($home?->divisions_heading) ? $home->divisions_heading : __('ui.nav.divisions')" />
     @endif
 
     @if ($projects->isNotEmpty())
-        <section class="k-section">
-            <div class="k-wrap">
-                <x-section-heading :title="filled($home?->projects_heading) ? $home->projects_heading : __('ui.nav.projects')" />
-                <div class="k-portfolio">
+        <section class="bx-band">
+            <div class="bx-shell">
+                <div class="bx-band-head bx-rise">
+                    <h2>{{ filled($home?->projects_heading) ? $home->projects_heading : __('ui.nav.projects') }}</h2>
+                </div>
+                <div class="bx-cards">
                     @foreach ($projects as $project)
                         @php
                             $translation = $project->publicTranslation();
                             $image = \App\Support\ImageStore::url($project->image_path);
                         @endphp
-                        <a class="k-portfolio-item {{ $loop->first ? 'is-lead' : '' }}" href="{{ $project->publicUrl('projects.show') }}">
+                        <a class="bx-card bx-rise" href="{{ $project->publicUrl('projects.show') }}" style="--bx-d: {{ min($loop->index, 6) * 70 }}ms">
                             @if ($image)
                                 <img src="{{ $image }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
                             @endif
-                            <span class="k-index-title">{{ $translation->title }}</span>
+                            <span class="bx-card-title">{{ $translation->title }}</span>
                             @if (filled($translation->summary))
-                                <span class="k-index-text">{{ $translation->summary }}</span>
+                                <span class="bx-card-text">{{ $translation->summary }}</span>
                             @endif
                         </a>
                     @endforeach
                 </div>
-                <p class="k-more"><a href="{{ route('projects.index') }}">{{ __('ui.nav.projects') }}</a></p>
             </div>
         </section>
     @endif
 
     @if (filled($home?->approach_heading) || filled($home?->approach_body))
-        <section class="k-section">
-            <div class="k-wrap k-narrow">
+        <section class="bx-about">
+            <div class="bx-shell bx-rise">
                 @if (filled($home?->approach_heading))
-                    <x-section-heading :title="$home->approach_heading" />
+                    <h2>{{ $home->approach_heading }}</h2>
                 @endif
                 <x-prose-body :body="$home->approach_body ?? null" />
             </div>

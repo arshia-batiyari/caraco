@@ -5,5 +5,5 @@
         ['label' => __('ui.nav.home'), 'url' => route('home')],
         ['label' => $heading],
     ]" />
-    <x-division-list :divisions="$divisions" :heading="$heading" />
+    <x-division-list :divisions="$divisions" :heading="$heading" level="1" />
 @endsection

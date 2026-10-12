@@ -95,6 +95,7 @@ return [
     'locale' => 'Language',
     'received' => 'Received',
     'role' => 'Role',
+    'dashboard_lead' => 'Published counts against the full record, and the latest messages.',
     'recent_inquiries' => 'Recent messages',
     'kinds' => [
         'route' => 'Site page',

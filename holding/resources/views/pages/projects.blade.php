@@ -6,7 +6,7 @@
         ['label' => $heading],
     ]" />
 
-    <section class="k-section">
+    <section class="k-section k-reel">
         <div class="k-wrap">
             <x-section-heading level="1" :title="$heading" />
             <div class="k-portfolio">

@@ -8,7 +8,7 @@ use App\Models\Destination;
 use App\Support\AlternateLinks;
 use App\Support\AttractionFilter;
 use App\Support\ContentPresenter;
-use App\Support\ImageStore;
+use App\Support\PreviewMedia;
 use App\Support\LocaleText;
 use App\Support\PublishedRecord;
 use App\Support\SeoData;
@@ -88,7 +88,7 @@ class AttractionController extends Controller
         return $presenter->render('pages.attractions.show', [
             'record' => $record,
             'translation' => $translation,
-            'cover' => ImageStore::url($record->cover_path),
+            'cover' => PreviewMedia::attraction($record),
             'place' => $place,
             'paragraphs' => LocaleText::paragraphs($translation->description),
             'visitor' => LocaleText::paragraphs($translation->visitor_info),
@@ -106,7 +106,7 @@ class AttractionController extends Controller
             title: $presenter->documentTitle($translation->meta_title, $translation->title),
             description: (string) ($translation->meta_description ?: $translation->summary ?: ''),
             canonical: $presenter->canonical($translation->canonical_url, $url),
-            image: ImageStore::url($record->cover_path),
+            image: PreviewMedia::attraction($record),
         ), AlternateLinks::record($record, 'attractions.show', 'title'));
     }
 }

@@ -15,7 +15,9 @@ class DesignSystemTest extends TestCase
             ->assertSee('alt="CARACO"', false)
             ->assertSee('KARAKO')
             ->assertDontSee('fonts.bunny.net')
+            ->assertSee('media/preview/tourism-hero.jpg', false)
             ->assertDontSee('<video', false)
+            ->assertDontSee('<iframe', false)
             ->assertDontSee('youtube');
     }
 

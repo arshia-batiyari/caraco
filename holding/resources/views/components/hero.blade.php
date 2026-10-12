@@ -7,6 +7,7 @@
     'imageAlt' => '',
     'badge' => null,
     'variant' => 'editorial',
+    'lang' => null,
 ])
 
 <section {{ $attributes->class(['k-hero', 'k-hero-'.$variant]) }}>
@@ -24,7 +25,7 @@
         @if ($eyebrow)
             <p class="k-eyebrow">{{ $eyebrow }}</p>
         @endif
-        <h1>{{ $title }}</h1>
+        <h1 @if (filled($lang)) lang="{{ $lang }}" @endif>{{ $title }}</h1>
         @if ($lede)
             <p class="k-lede">{{ $lede }}</p>
         @endif

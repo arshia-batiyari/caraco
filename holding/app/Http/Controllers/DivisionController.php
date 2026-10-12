@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Division;
 use App\Support\ContentPresenter;
 use App\Support\ImageStore;
+use App\Support\PreviewMedia;
 use App\Support\PublicContent;
 use App\Support\SeoData;
 use Illuminate\View\View;
@@ -44,13 +45,13 @@ class DivisionController extends Controller
         return $presenter->render('pages.division', [
             'division' => $division,
             'translation' => $translation,
-            'image' => ImageStore::url($division->image_path),
+            'image' => PreviewMedia::division($division->image_path, $division->key),
             'schema' => $presenter->breadcrumb($translation->title, $canonical),
         ], new SeoData(
             title: $presenter->documentTitle($translation->meta_title, $translation->title),
             description: (string) ($translation->meta_description ?: $translation->introduction ?: ''),
             canonical: $canonical,
-            image: ImageStore::url($division->image_path) ?: ImageStore::url(\App\Models\Setting::getValue('og_image')),
+            image: PreviewMedia::division($division->image_path, $division->key) ?: ImageStore::url(\App\Models\Setting::getValue('og_image')),
         ), $content->alternatesForDivisions($division));
     }
 

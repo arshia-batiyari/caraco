@@ -1,9 +1,9 @@
 @props(['video'])
 
 @if (is_array($video) && filled($video['src'] ?? null))
-    <section class="k-section k-section-tight" aria-label="{{ __('ui.video.title') }}">
-        <div class="k-wrap">
-            <figure class="k-video" data-video>
+    <section class="bx-reel" aria-label="{{ __('ui.video.title') }}">
+        <div class="bx-shell">
+            <figure class="k-video bx-reel-stage" data-video>
                 <div class="k-video-frame">
                     @if ($video['type'] === 'file')
                         <video controls preload="metadata" playsinline @if ($video['poster']) poster="{{ $video['poster'] }}" @endif>

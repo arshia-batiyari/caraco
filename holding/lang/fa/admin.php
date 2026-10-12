@@ -95,6 +95,7 @@ return [
     'locale' => 'زبان',
     'received' => 'دریافت',
     'role' => 'نقش',
+    'dashboard_lead' => 'شمار منتشرشده در برابر کل رکورد، و پیام‌های تازه.',
     'recent_inquiries' => 'پیام‌های تازه',
     'kinds' => [
         'route' => 'صفحه سایت',

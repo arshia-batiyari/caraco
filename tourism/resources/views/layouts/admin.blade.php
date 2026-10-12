@@ -23,10 +23,11 @@
             <header class="k-admin-bar">
                 <div class="k-wrap-wide k-admin-bar-inner">
                     <label class="k-admin-menu" for="k-admin-nav-toggle">{{ __('admin.menu') }}</label>
-                    <a class="k-brand" href="{{ route('admin.dashboard') }}">
+                    <a class="k-brand k-admin-bar-brand" href="{{ route('admin.dashboard') }}">
                         <x-logo size="admin" />
-                        <span class="k-brand-line">{{ __('admin.panel') }}</span>
+                        <span class="k-sr">{{ __('admin.panel') }}</span>
                     </a>
+                    <p class="k-admin-bar-title">@yield('title', __('admin.dashboard'))</p>
                     <form method="post" action="{{ route('admin.logout') }}">
                         @csrf
                         <button class="k-btn k-btn-line" type="submit">{{ __('admin.logout') }}</button>
@@ -34,6 +35,16 @@
                 </div>
             </header>
             <main class="k-admin-main k-wrap">
+                @php $adminTitle = trim($__env->yieldContent('title')); @endphp
+                <nav class="k-admin-crumbs" aria-label="{{ __('admin.menu') }}">
+                    @if ($adminTitle === '' || $adminTitle === __('admin.dashboard'))
+                        <span aria-current="page">{{ __('admin.dashboard') }}</span>
+                    @else
+                        <a href="{{ route('admin.dashboard') }}">{{ __('admin.dashboard') }}</a>
+                        <span aria-hidden="true">/</span>
+                        <span aria-current="page">{{ $adminTitle }}</span>
+                    @endif
+                </nav>
                 @if (session('status'))
                     <x-alert type="success">{{ session('status') }}</x-alert>
                 @endif

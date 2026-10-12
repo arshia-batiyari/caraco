@@ -1,7 +1,7 @@
 @php
     $label = $record->publicTranslation();
     $url = $record->publicUrl('attractions.show');
-    $image = \App\Support\ImageStore::url($record->cover_path);
+    $image = \App\Support\PreviewMedia::attraction($record);
     $place = $record->publicPlace();
     $city = $place['city'];
     $country = $place['country'];

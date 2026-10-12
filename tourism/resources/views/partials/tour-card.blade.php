@@ -10,8 +10,9 @@
 @if ($translation && $url)
     <article class="k-tour-card">
         <a href="{{ $url }}">
-            @if ($tour->cover_path)
-                <img src="{{ \App\Support\ImageStore::url($tour->cover_path) }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
+            @php $cover = \App\Support\PreviewMedia::tour($tour); @endphp
+            @if ($cover)
+                <img src="{{ $cover }}" alt="{{ $translation->title }}" loading="lazy" decoding="async">
             @endif
             <div>
                 @if ($discounted)

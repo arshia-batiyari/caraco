@@ -43,7 +43,7 @@
         </section>
     @endif
 
-    <section class="k-section k-section-tight">
+    <section class="k-section k-section-tight k-discover-band">
         <div class="k-wrap">
             <h2>{{ __('ui.home.discover') }}</h2>
             <form class="k-discover" method="get" action="{{ route('tours.index') }}">
@@ -75,8 +75,6 @@
         </div>
     </section>
 
-    <x-video-player :video="$video" />
-
     @if (filled($home?->intro_heading) || filled($home?->intro_body))
         <section class="k-section">
             <div class="k-wrap k-narrow">
@@ -94,11 +92,12 @@
         <section class="k-section">
             <div class="k-wrap">
                 <x-section-heading :title="$home?->destinations_heading ?? __('ui.home.destinations')" />
-                <div class="k-card-grid">
+                <div class="k-editorial-rail">
                     @foreach ($destinations as $destination)
                         <a class="k-tour-card" href="{{ $destination->publicUrl('destinations.show') }}">
-                            @if ($destination->image_path)
-                                <img src="{{ \App\Support\ImageStore::url($destination->image_path) }}" alt="{{ $destination->publicTranslation()->name }}" loading="lazy" decoding="async">
+                            @php $destinationImage = \App\Support\PreviewMedia::destination($destination); @endphp
+                            @if ($destinationImage)
+                                <img src="{{ $destinationImage }}" alt="{{ $destination->publicTranslation()->name }}" loading="lazy" decoding="async">
                             @endif
                             <h3>{{ $destination->publicTranslation()->name }}</h3>
                         </a>
@@ -122,13 +121,13 @@
     @endif
 
     @foreach ([
-        ['items' => $popular, 'title' => $home?->popular_heading ?? __('ui.home.popular')],
-        ['items' => $discounted, 'title' => $home?->discounted_heading ?? __('ui.home.discounted')],
-        ['items' => $domestic, 'title' => $home?->domestic_heading ?? __('ui.home.domestic')],
-        ['items' => $international, 'title' => $home?->international_heading ?? __('ui.home.international')],
+        ['items' => $popular, 'title' => $home?->popular_heading ?? __('ui.home.popular'), 'tone' => 'k-band-feature'],
+        ['items' => $discounted, 'title' => $home?->discounted_heading ?? __('ui.home.discounted'), 'tone' => 'k-band-sale'],
+        ['items' => $domestic, 'title' => $home?->domestic_heading ?? __('ui.home.domestic'), 'tone' => 'k-band-rail'],
+        ['items' => $international, 'title' => $home?->international_heading ?? __('ui.home.international'), 'tone' => 'k-band-rail k-band-offset'],
     ] as $block)
         @if ($block['items']->isNotEmpty())
-            <section class="k-section">
+            <section class="k-section {{ $block['tone'] }}">
                 <div class="k-wrap">
                     <x-section-heading :title="$block['title']" />
                     <div class="k-card-grid">
@@ -145,11 +144,12 @@
         <section class="k-section">
             <div class="k-wrap">
                 <x-section-heading :title="$home?->experiences_heading ?? __('ui.home.experiences')" />
-                <div class="k-card-grid">
+                <div class="k-stay-list">
                     @foreach ($hotels as $hotel)
                         <article class="k-tour-card">
-                            @if ($hotel->images->first())
-                                <img src="{{ \App\Support\ImageStore::url($hotel->images->first()->path) }}" alt="{{ $hotel->publicTranslation()->name }}" loading="lazy" decoding="async">
+                            @php $hotelImage = \App\Support\PreviewMedia::hotel($hotel); @endphp
+                            @if ($hotelImage)
+                                <img src="{{ $hotelImage }}" alt="{{ $hotel->publicTranslation()->name }}" loading="lazy" decoding="async">
                             @endif
                             <h3>{{ $hotel->publicTranslation()->name }}</h3>
                             @if (filled($hotel->accommodation_category))
@@ -165,34 +165,55 @@
         </section>
     @endif
 
-    @if (filled($home?->medical_heading) || filled($home?->medical_body))
-        <section class="k-section">
-            <div class="k-wrap k-narrow">
-                @if (filled($home?->medical_heading))
-                    <x-section-heading :title="$home->medical_heading" />
+    @if ((filled($home?->medical_heading) || filled($home?->medical_body) || $hasMedical) || $hasAttractions)
+        <section class="k-section k-duo-section">
+            <div class="k-wrap k-duo">
+                @if (filled($home?->medical_heading) || filled($home?->medical_body) || $hasMedical)
+                    <article>
+                        @if (filled($home?->medical_heading))
+                            <x-section-heading :title="$home->medical_heading" />
+                        @else
+                            <x-section-heading :title="__('ui.medical.title')" :intro="filled($home?->medical_body) ? null : __('ui.medical.home_note')" />
+                        @endif
+                        @foreach (\App\Support\LocaleText::paragraphs($home?->medical_body) as $paragraph)
+                            <p>{{ $paragraph }}</p>
+                        @endforeach
+                        @if ($hasMedical)
+                            <p class="k-more"><a class="k-btn k-btn-line" href="{{ route('medical.index') }}">{{ __('ui.medical.visit') }}</a></p>
+                        @endif
+                    </article>
                 @endif
-                @foreach (\App\Support\LocaleText::paragraphs($home?->medical_body) as $paragraph)
-                    <p>{{ $paragraph }}</p>
-                @endforeach
-                @if ($hasMedical)
-                    <p><a class="k-btn k-btn-line" href="{{ route('medical.index') }}">{{ __('ui.medical.visit') }}</a></p>
+                @if ($hasAttractions)
+                    <article>
+                        <x-section-heading :title="__('ui.attractions.title')" :intro="__('ui.attractions.description')" />
+                        <a class="k-btn k-btn-line" href="{{ route('attractions.index') }}">{{ __('ui.attractions.title') }}</a>
+                    </article>
                 @endif
-            </div>
-        </section>
-    @elseif ($hasMedical)
-        <section class="k-section">
-            <div class="k-wrap k-narrow">
-                <x-section-heading :title="__('ui.medical.title')" :intro="__('ui.medical.home_note')" />
-                <a class="k-btn k-btn-line" href="{{ route('medical.index') }}">{{ __('ui.medical.visit') }}</a>
             </div>
         </section>
     @endif
 
-    @if ($hasAttractions)
-        <section class="k-section">
-            <div class="k-wrap k-narrow">
-                <x-section-heading :title="__('ui.attractions.title')" :intro="__('ui.attractions.description')" />
-                <a class="k-btn k-btn-line" href="{{ route('attractions.index') }}">{{ __('ui.attractions.title') }}</a>
+    @if ($reviews->isNotEmpty())
+        <section class="k-section k-quotes">
+            <div class="k-wrap">
+                <x-section-heading :title="__('ui.feedback.title')" :intro="__('ui.feedback.lede')" />
+                <div class="k-home-quotes">
+                    @foreach ($reviews as $review)
+                        <blockquote class="k-quote">
+                            @if (filled($review->title))
+                                <h3>{{ $review->title }}</h3>
+                            @endif
+                            <p>{{ $review->message }}</p>
+                            <footer>
+                                <cite>{{ $review->publicName() }}</cite>
+                                @if ($review->tour?->publicTranslation())
+                                    <span>{{ $review->tour->publicTranslation()->title }}</span>
+                                @endif
+                            </footer>
+                        </blockquote>
+                    @endforeach
+                </div>
+                <p class="k-more"><a href="{{ route('feedback.index') }}">{{ __('ui.feedback.title') }}</a></p>
             </div>
         </section>
     @endif
