@@ -38,7 +38,51 @@ class HostSetupRouteTest extends TestCase
 
     public function test_setup_migrates_an_empty_database(): void
     {
-        $path = storage_path('framework/testing-setup-tourism.sqlite');
+        $this->withIsolatedSqlite('testing-setup-tourism.sqlite', function () {
+            $this->get('/setup')
+                ->assertOk()
+                ->assertSee('create_tourism_content_tables')
+                ->assertDontSee('Seeding database');
+
+            $this->assertTrue(Schema::hasTable('settings'));
+
+            $this->get('/setup')
+                ->assertOk()
+                ->assertSee('Nothing to migrate');
+        });
+    }
+
+    public function test_setup_continues_when_users_already_exists(): void
+    {
+        $this->withIsolatedSqlite('testing-setup-tourism-partial.sqlite', function () {
+            Schema::create('users', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email', 255)->unique();
+                $table->string('password');
+                $table->timestamps();
+            });
+
+            $this->get('/setup')
+                ->assertOk()
+                ->assertDontSee('SQLSTATE')
+                ->assertSee('create_tourism_content_tables');
+
+            $this->assertTrue(Schema::hasTable('users'));
+            $this->assertTrue(Schema::hasTable('password_reset_tokens'));
+            $this->assertTrue(Schema::hasTable('sessions'));
+            $this->assertTrue(Schema::hasTable('settings'));
+        });
+    }
+
+    public function test_indexed_strings_stay_within_the_shared_host_key_limit(): void
+    {
+        $this->assertSame(191, \Illuminate\Database\Schema\Builder::$defaultStringLength);
+    }
+
+    private function withIsolatedSqlite(string $filename, callable $callback): void
+    {
+        $path = storage_path('framework/'.$filename);
         if (is_file($path)) {
             unlink($path);
         }
@@ -53,16 +97,7 @@ class HostSetupRouteTest extends TestCase
         DB::purge('sqlite');
 
         try {
-            $this->get('/setup')
-                ->assertOk()
-                ->assertSee('create_tourism_content_tables')
-                ->assertDontSee('Seeding database');
-
-            $this->assertTrue(Schema::hasTable('settings'));
-
-            $this->get('/setup')
-                ->assertOk()
-                ->assertSee('Nothing to migrate');
+            $callback();
         } finally {
             while ($originalPdo->inTransaction()) {
                 $originalPdo->rollBack();

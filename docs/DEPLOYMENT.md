@@ -186,6 +186,8 @@ php artisan db:seed --force
 
 That seed writes the nine division titles and the default navigation. It does not create a user and it does not contain a password. Tourism’s seeder is empty. Enter tours and other tourism records in the admin.
 
+Indexed string columns are 191 characters. On a shared host, a `utf8mb4` index is limited to 1000 bytes, and `varchar(255)` is 1020 bytes, so MySQL rejects the primary key. If `/setup` stops after creating `users`, upload this version and open `/setup` again. Tables that already exist are left in place, and the remaining tables are created.
+
 Create the first administrator without putting the password in the command, so it is less likely to land in shell history:
 
 ```bash
