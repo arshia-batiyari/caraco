@@ -4,6 +4,11 @@ return [
     'skip' => 'Skip to content',
     'menu' => 'Menu',
     'language' => 'Language',
+    'cursor' => [
+        'open' => 'Open',
+        'view' => 'View',
+        'play' => 'Play',
+    ],
     'primary_nav' => 'Primary',
     'breadcrumb' => 'Breadcrumb',
     'pagination' => 'Pagination',

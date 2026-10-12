@@ -4,6 +4,11 @@ return [
     'skip' => 'رفتن به محتوا',
     'menu' => 'فهرست',
     'language' => 'زبان',
+    'cursor' => [
+        'open' => 'باز کردن',
+        'view' => 'دیدن',
+        'play' => 'پخش',
+    ],
     'primary_nav' => 'اصلی',
     'breadcrumb' => 'مسیر',
     'pagination' => 'صفحه‌بندی',

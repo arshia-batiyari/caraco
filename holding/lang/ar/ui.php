@@ -4,6 +4,11 @@ return [
     'skip' => 'تخطي إلى المحتوى',
     'menu' => 'القائمة',
     'language' => 'اللغة',
+    'cursor' => [
+        'open' => 'فتح',
+        'view' => 'عرض',
+        'play' => 'تشغيل',
+    ],
     'primary_nav' => 'الرئيسية',
     'breadcrumb' => 'المسار',
     'pagination' => 'ترقيم الصفحات',

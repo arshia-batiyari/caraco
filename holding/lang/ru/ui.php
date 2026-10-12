@@ -4,6 +4,11 @@ return [
     'skip' => 'К содержанию',
     'menu' => 'Меню',
     'language' => 'Язык',
+    'cursor' => [
+        'open' => 'Открыть',
+        'view' => 'Смотреть',
+        'play' => 'Пуск',
+    ],
     'primary_nav' => 'Основное',
     'breadcrumb' => 'Навигация',
     'pagination' => 'Страницы',

@@ -55,7 +55,7 @@
         </style>
     </noscript>
 </head>
-<body>
+<body data-cursor-open="{{ __('ui.cursor.open') }}" data-cursor-view="{{ __('ui.cursor.view') }}" data-cursor-play="{{ __('ui.cursor.play') }}">
     <a class="k-skip" href="#content">{{ __('ui.skip') }}</a>
     <header class="k-header {{ trim($__env->yieldContent('header_tone')) }}" data-nav>
         <div class="k-header-bar k-wrap-wide">

@@ -14,6 +14,12 @@
 @import "@fontsource/vazirmatn/latin-400.css";
 @import "@fontsource/vazirmatn/latin-500.css";
 @import "@fontsource/vazirmatn/latin-600.css";
+@import "@fontsource/manrope/latin-400.css";
+@import "@fontsource/manrope/latin-500.css";
+@import "@fontsource/manrope/latin-600.css";
+@import "@fontsource/manrope/cyrillic-400.css";
+@import "@fontsource/manrope/cyrillic-500.css";
+@import "@fontsource/manrope/cyrillic-600.css";
 
 @import "tailwindcss";
 
@@ -2610,5 +2616,176 @@ main {
     .k-hero-copy,
     .k-masthead .k-wrap > div {
         animation: none !important;
+    }
+}
+
+:lang(en),
+:lang(ru) {
+    --font-text: "Manrope", "Source Sans 3", sans-serif;
+}
+
+:lang(en) .k-nav a,
+:lang(ru) .k-nav a,
+:lang(en) .k-header-cta,
+:lang(ru) .k-header-cta {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+
+:lang(en) .k-lede,
+:lang(ru) .k-lede {
+    font-family: "Literata", "Manrope", serif;
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    line-height: 1.45;
+}
+
+.k-nav a {
+    background-image: linear-gradient(#c6a36a, #c6a36a);
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-size: 0 1px;
+    box-shadow: none;
+    transition: background-size 360ms ease, color 360ms ease;
+}
+
+.k-nav a:hover,
+.k-nav a[aria-current="page"] {
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    box-shadow: none;
+}
+
+.k-index-link,
+.k-portfolio-item {
+    transition: background-color 420ms ease, color 420ms ease;
+}
+
+.k-index-link:hover {
+    background: #141210;
+    color: #f4efe6;
+}
+
+.k-index-link:hover .k-index-no,
+.k-index-link:hover .k-index-title {
+    color: #e7d3a8;
+}
+
+.k-index-link:hover .k-index-text {
+    color: rgba(244, 239, 230, 0.74);
+}
+
+.k-portfolio-item,
+.k-feature-tourism {
+    overflow: hidden;
+}
+
+.k-portfolio-item img,
+.k-feature-tourism img {
+    transition: transform 700ms ease;
+}
+
+.k-portfolio-item:hover img,
+.k-feature-tourism:hover img {
+    transform: scale(1.045);
+}
+
+.k-approach .k-prose,
+.k-approach .k-prose p {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.1vw, 1.9rem);
+    line-height: 1.4;
+    color: var(--k-ink);
+}
+
+.k-footer a {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-size: 0 1px;
+    transition: background-size 320ms ease, color 320ms ease;
+}
+
+.k-footer a:hover {
+    background-size: 100% 1px;
+    background-position: 0 100%;
+}
+
+.k-cursor {
+    position: fixed;
+    z-index: 90;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: #c6a36a;
+    pointer-events: none;
+    transition: width 320ms ease, height 320ms ease, opacity 200ms ease;
+}
+
+.k-cursor span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0.4rem;
+    color: #141210;
+    font-family: var(--font-text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.15;
+    text-align: center;
+    text-transform: uppercase;
+    opacity: 0;
+}
+
+:lang(fa) .k-cursor span,
+:lang(ar) .k-cursor span {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.84rem;
+}
+
+.k-cursor.is-label {
+    width: 6.5rem;
+    height: 6.5rem;
+}
+
+.k-cursor.is-label span {
+    opacity: 1;
+}
+
+.k-cursor.is-hide {
+    opacity: 0;
+}
+
+html.has-cursor .k-cursor {
+    display: block;
+}
+
+html.has-cursor [data-cursor] {
+    cursor: none;
+}
+
+@media (pointer: coarse) {
+    html.has-cursor .k-cursor {
+        display: none;
+    }
+
+    html.has-cursor [data-cursor] {
+        cursor: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .k-cursor,
+    .k-nav a,
+    .k-index-link,
+    .k-portfolio-item img,
+    .k-feature-tourism img,
+    .k-footer a {
+        transition: none;
     }
 }
