@@ -142,7 +142,7 @@ php artisan karako:prepare
 
 That command writes `APP_KEY` only when the line is empty, and it also creates the storage link from the next section. Use a different key for holding and tourism. Do not run `key:generate --force` on an application that already has sessions or encrypted values.
 
-After the files are on the host, open `/setup` once in the browser. On the holding domain that is `https://example.com/setup`, and on the tourism domain it is the same path. The page runs `key:generate` and then `storage:link`. When `APP_KEY` is already filled, the page leaves the key and still creates the storage link. Do the same on the other domain.
+After the files are on the host, open `/setup` once in the browser. On the holding domain that is `https://example.com/setup`, and on the tourism domain it is the same path. The page runs `key:generate`, `migrate --force`, and `storage:link`. Holding also seeds the nine divisions the first time that table is empty. When `APP_KEY` is already filled, the page leaves the key. Do the same on the other domain.
 
 Production values that matter:
 
@@ -196,7 +196,7 @@ The command prints a generated password once. Store it in a password manager, si
 
 `--password=` exists for a non-interactive run. Prefer the generated password.
 
-There is no public installer. Do not add a web route that runs migrations.
+On a host without a terminal, opening `/setup` already runs `migrate --force` and, for holding, this seed the first time the divisions table is empty. `/setup` does not create an administrator. `karako:admin` still needs the panel terminal or a one-off cron entry.
 
 ## 7. Storage and permissions
 

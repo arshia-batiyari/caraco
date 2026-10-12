@@ -6,6 +6,8 @@ use App\Models\ProfileTranslation;
 use App\Support\LocaleUrl;
 use App\Support\SeoData;
 use App\Support\SiteContext;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class SiteComposer
@@ -27,15 +29,36 @@ class SiteComposer
         $noindex = $named === null || in_array($named, ['foundations', 'credits'], true);
         $existing = $view->getData();
 
+        $footerSummary = null;
+        $navLinks = [];
+        $footerLinks = [];
+        $socialLinks = new Collection;
+        $contactDetails = null;
+        $contactEmail = null;
+        $contactPhone = null;
+        try {
+            $footerSummary = ProfileTranslation::forLocale()?->summary;
+            $navLinks = $this->site->links('header');
+            $footerLinks = $this->site->links('footer');
+            $socialLinks = $this->site->socialLinks();
+            $contactDetails = $this->site->contact();
+            $contactEmail = $this->site->email();
+            $contactPhone = $this->site->phone();
+        } catch (QueryException $exception) {
+            if (! $this->missingTable($exception)) {
+                throw $exception;
+            }
+        }
+
         $view->with([
             'brandLine' => __('ui.brand.holding'),
-            'footerSummary' => ProfileTranslation::forLocale()?->summary,
-            'navLinks' => $this->site->links('header'),
-            'footerLinks' => $this->site->links('footer'),
-            'socialLinks' => $this->site->socialLinks(),
-            'contactDetails' => $this->site->contact(),
-            'contactEmail' => $this->site->email(),
-            'contactPhone' => $this->site->phone(),
+            'footerSummary' => $footerSummary,
+            'navLinks' => $navLinks,
+            'footerLinks' => $footerLinks,
+            'socialLinks' => $socialLinks,
+            'contactDetails' => $contactDetails,
+            'contactEmail' => $contactEmail,
+            'contactPhone' => $contactPhone,
             'relatedUrl' => config('karako.related_url') ?: null,
             'relatedLabel' => __('ui.related.tourism'),
             'alternates' => $alternates,
@@ -46,6 +69,13 @@ class SiteComposer
                 robots: $noindex ? 'noindex, follow' : 'index, follow',
             ),
         ]);
+    }
+
+    private function missingTable(QueryException $exception): bool
+    {
+        $state = (string) ($exception->errorInfo[0] ?? '');
+
+        return $state === '42S02' || str_contains($exception->getMessage(), 'no such table');
     }
 
     private function fallbackTitle(?string $named): string

@@ -10,7 +10,7 @@ class HostSetupController extends Controller
 {
     public function __invoke(): Response
     {
-        $body = $this->keyGenerate()."\n\n".$this->storageLink()."\n";
+        $body = $this->keyGenerate()."\n\n".$this->migrate()."\n\n".$this->storageLink()."\n";
 
         return response($body, 200, [
             'Content-Type' => 'text/plain; charset=UTF-8',
@@ -28,6 +28,26 @@ class HostSetupController extends Controller
             $output = trim(Artisan::output());
 
             return $output !== '' ? $output : 'key:generate finished.';
+        } catch (Throwable $exception) {
+            return $exception->getMessage();
+        }
+    }
+
+    private function migrate(): string
+    {
+        try {
+            Artisan::call('migrate', ['--force' => true]);
+            $output = trim(Artisan::output());
+
+            if (class_exists(\App\Models\Division::class) && \App\Models\Division::query()->doesntExist()) {
+                Artisan::call('db:seed', ['--force' => true]);
+                $seeded = trim(Artisan::output());
+                if ($seeded !== '') {
+                    $output = trim($output."\n".$seeded);
+                }
+            }
+
+            return $output !== '' ? $output : 'migrate finished.';
         } catch (Throwable $exception) {
             return $exception->getMessage();
         }
